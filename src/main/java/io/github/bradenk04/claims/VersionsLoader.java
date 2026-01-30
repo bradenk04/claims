@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class VersionsLoader {
+class VersionsLoader {
     public String kotlinVersion;
     public String ktomlVersion;
 
