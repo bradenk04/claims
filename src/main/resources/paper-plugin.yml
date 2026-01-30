@@ -3,3 +3,4 @@ version: ${project.version}
 main: io.github.bradenk04.claims.ClaimPlugin
 description: Claim plugin for PaperMC & Folia
 api-version: 1.21.11
+loader: io.github.bradenk04.claims.PluginLoader
