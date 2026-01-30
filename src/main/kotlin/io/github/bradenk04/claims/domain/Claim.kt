@@ -17,4 +17,6 @@ class Claim private constructor(
     }
 
     fun getPermission(role: String, permission: ClaimPermission): Boolean = metadata.permissions[role]?.contains(permission) ?: false
+
+    fun isBanned(player: OfflinePlayer): Boolean = metadata.bans.contains(player.uniqueId)
 }
