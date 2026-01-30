@@ -1,6 +1,7 @@
 package io.github.bradenk04.claims
 
 import io.github.bradenk04.claims.listener.PlayerItemEvents
+import io.github.bradenk04.claims.listener.PlayerMoveEvents
 import io.github.bradenk04.claims.listener.PlayerTeleportEvents
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -30,5 +31,6 @@ class ClaimPlugin : JavaPlugin() {
     fun registerListeners() {
         server.pluginManager.registerEvents(PlayerItemEvents(), this)
         server.pluginManager.registerEvents(PlayerTeleportEvents(), this)
+        server.pluginManager.registerEvents(PlayerMoveEvents(), this)
     }
 }
