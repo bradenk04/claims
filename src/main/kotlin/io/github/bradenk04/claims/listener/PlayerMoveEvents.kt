@@ -1,4 +1,6 @@
 package io.github.bradenk04.claims.listener
 
-class PlayerMoveEvents {
+import org.bukkit.event.Listener
+
+class PlayerMoveEvents : Listener {
 }
