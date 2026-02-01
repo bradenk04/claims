@@ -33,7 +33,7 @@ public class PluginLoader implements io.papermc.paper.plugin.loader.PluginLoader
                 null
         ));
         resolver.addDependency(new Dependency(
-                new DefaultArtifact("io.github.revxrsal:lamp.paper:" + versions.lampVersion),
+                new DefaultArtifact("io.github.revxrsal:lamp.bukkit:" + versions.lampVersion),
                 null
         ));
 
