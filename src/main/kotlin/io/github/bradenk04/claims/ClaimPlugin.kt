@@ -22,8 +22,8 @@ class ClaimPlugin : JavaPlugin() {
 
     override fun onEnable() {
         if (!dataFolder.exists()) dataFolder.mkdirs()
-
         plugin = this
+        FloodgateHelper.setupFloodgate()
 
         registerListeners()
     }

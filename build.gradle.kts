@@ -11,12 +11,20 @@ plugins {
 group = "io.github.bradenk04"
 version = "0.0.1"
 
+repositories {
+    maven("https://repo.opencollab.dev/main/")
+}
+
 dependencies {
     paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
 
+    // Downloaded in loader
     compileOnly(kotlin("stdlib"))
     compileOnly(libs.ktoml.core)
     compileOnly(libs.ktoml.file)
+
+    // Plugin Dependencies
+    compileOnly(libs.floodgate.api)
 }
 
 paperweight {
@@ -42,6 +50,7 @@ tasks {
 
     processResources {
         inputs.property("kotlinVersion", kotlinVersion)
+        inputs.property("ktomlVersion", ktomlVersion)
 
         filesMatching("plugin.yml") {
             expand("version" to project.version)

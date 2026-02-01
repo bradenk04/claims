@@ -2,6 +2,7 @@
 paperweight = "2.0.0-beta.19"
 kotlin = "2.3.0"
 ktoml = "0.7.1"
+floodgate = "2.2.4-SNAPSHOT"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -11,3 +12,4 @@ paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "pa
 [libraries]
 ktoml-core = { module = "com.akuleshov7:ktoml-core", version.ref = "ktoml" }
 ktoml-file = { module = "com.akuleshov7:ktoml-file", version.ref = "ktoml" }
+floodgate-api = { module = "org.geysermc.floodgate:api", version.ref = "floodgate" }
