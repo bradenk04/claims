@@ -2,19 +2,26 @@ package io.github.bradenk04.claims.domain
 
 import org.bukkit.OfflinePlayer
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 class Claim private constructor(
     val id: UUID,
-    val ownerUUID: UUID,
-    val metadata: ClaimMetadata = ClaimMetadata(),
-    val positions: List<Pair<ClaimPos, ClaimPos>> = emptyList()
+    val owner: UUID,
+    val name: String?,
+    val description: String?,
+    val chunks: MutableSet<ChunkLocation>,
+    val bans: Set<UUID> = emptySet(),
+    val roles: ConcurrentHashMap<UUID, String> = ConcurrentHashMap(),
+    val permissions: ConcurrentHashMap<String, Set<ClaimPermission>> = ConcurrentHashMap()
 ) {
     fun hasPermission(player: OfflinePlayer, permission: ClaimPermission): Boolean {
-        val role = metadata.roles[player.uniqueId] ?: "guest"
+        val role = roles[player.uniqueId] ?: "guest"
         return getPermission(role, permission)
     }
 
-    fun getPermission(role: String, permission: ClaimPermission): Boolean = metadata.permissions[role]?.contains(permission) ?: false
+    fun getPermission(role: String, permission: ClaimPermission): Boolean = permissions[role]?.contains(permission) ?: false
 
-    fun isBanned(player: OfflinePlayer): Boolean = metadata.bans.contains(player.uniqueId)
+    fun isBanned(player: OfflinePlayer): Boolean = bans.contains(player.uniqueId)
 }
+
+data class ChunkLocation(val world: UUID, val x: Int, val z: Int)

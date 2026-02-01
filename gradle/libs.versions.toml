@@ -3,7 +3,7 @@ paperweight = "2.0.0-beta.19"
 kotlin = "2.3.0"
 ktoml = "0.7.1"
 floodgate = "2.2.4-SNAPSHOT"
-lamp = "4.0.0-rc.19"
+lamp = "4.0.0-rc.14"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
