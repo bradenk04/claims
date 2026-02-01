@@ -22,6 +22,8 @@ dependencies {
     compileOnly(kotlin("stdlib"))
     compileOnly(libs.ktoml.core)
     compileOnly(libs.ktoml.file)
+    compileOnly(libs.lamp.common)
+    compileOnly(libs.lamp.paper)
 
     // Plugin Dependencies
     compileOnly(libs.floodgate.api)
@@ -36,6 +38,7 @@ paperweight {
 
 val kotlinVersion: String = libs.versions.kotlin.get() ?: "2.3.0"
 val ktomlVersion = libs.versions.ktoml.get() ?: "0.7.1"
+val lampVersion = libs.versions.lamp.get() ?: "4.0.0-rc.14"
 
 tasks {
     withType<JavaCompile> {
@@ -51,6 +54,7 @@ tasks {
     processResources {
         inputs.property("kotlinVersion", kotlinVersion)
         inputs.property("ktomlVersion", ktomlVersion)
+        inputs.property("lampVersion", lampVersion)
 
         filesMatching("plugin.yml") {
             expand("version" to project.version)
@@ -59,7 +63,8 @@ tasks {
         filesMatching("loader.properties") {
             expand(
                 "kotlinVersion" to kotlinVersion,
-                "ktomlVersion" to ktomlVersion
+                "ktomlVersion" to ktomlVersion,
+                "lampVersion" to lampVersion
             )
         }
     }

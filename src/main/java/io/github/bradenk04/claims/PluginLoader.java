@@ -28,6 +28,14 @@ public class PluginLoader implements io.papermc.paper.plugin.loader.PluginLoader
                 new DefaultArtifact("com.akuleshov7:ktoml-file:" + versions.ktomlVersion),
                 null
         ));
+        resolver.addDependency(new Dependency(
+                new DefaultArtifact("io.github.revxrsal:lamp.common:" + versions.lampVersion),
+                null
+        ));
+        resolver.addDependency(new Dependency(
+                new DefaultArtifact("io.github.revxrsal:lamp.paper:" + versions.lampVersion),
+                null
+        ));
 
         pluginClasspathBuilder.addLibrary(resolver);
     }

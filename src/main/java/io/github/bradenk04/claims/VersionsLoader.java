@@ -7,10 +7,11 @@ import java.util.Properties;
 class VersionsLoader {
     public String kotlinVersion;
     public String ktomlVersion;
+    public String lampVersion;
 
-    private VersionsLoader(String _kotlinVersion, String _ktomlVersion) {
-        this.kotlinVersion = _kotlinVersion;
-        this.ktomlVersion = _ktomlVersion;
+    private VersionsLoader(String kotlinVersion, String ktomlVersion, String lampVersion) {
+        this.kotlinVersion = kotlinVersion;
+        this.ktomlVersion = ktomlVersion;
     }
 
 
@@ -22,7 +23,7 @@ class VersionsLoader {
                 throw new RuntimeException("loader.properties not found");
             }
             props.load(stream);
-            return new VersionsLoader(props.getProperty("kotlin.version"), props.getProperty("ktoml.version"));
+            return new VersionsLoader(props.getProperty("kotlin.version"), props.getProperty("ktoml.version"), props.getProperty("lamp.version"));
         } catch (IOException e) {
             throw new RuntimeException("Failed to load dependency versions", e);
         }
