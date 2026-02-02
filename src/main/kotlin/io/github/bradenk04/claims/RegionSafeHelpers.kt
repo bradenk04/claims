@@ -6,17 +6,17 @@ import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
 
-fun Player.safeTeleport(player: Player, loc: Location) {
+fun Player.safeTeleport(loc: Location) {
     if (ClaimPlugin.isFolia) {
-        if (!player.isOnline || player.isDead) return
-        val playerLoc = player.location
-        player.teleportAsync(loc).thenAccept {
-            player.scheduler.run(ClaimPlugin.plugin, {
-                val event = PlayerTeleportEvent(player, playerLoc, loc, PlayerTeleportEvent.TeleportCause.PLUGIN)
+        if (!isOnline || isDead) return
+        val playerLoc = location
+        teleportAsync(loc).thenAccept {
+            scheduler.run(ClaimPlugin.plugin, {
+                val event = PlayerTeleportEvent(this, playerLoc, loc, PlayerTeleportEvent.TeleportCause.PLUGIN)
                 Bukkit.getPluginManager().callEvent(event)
             }, null)
         }
-    } else if (player.isOnline && !player.isDead) player.teleport(loc)
+    } else if (isOnline && !isDead) teleport(loc)
 }
 
 fun Location.toChunkLocation() = ChunkLocation(this.world.uid, this.chunk.x, this.chunk.z)

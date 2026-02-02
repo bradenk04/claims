@@ -20,12 +20,6 @@ import org.bukkit.entity.Player
 object ClaimRoleDialog {
     fun getDialog(player: Player, claim: Claim): Dialog {
         val roles = claim.roles.toMutableList()
-        if (!roles.map { it.name }.contains("owner")) {
-            roles.add(Claim.ClaimRole(claim.id, "owner", NamedTextColor.RED, ClaimPermission.entries.toSet()))
-        }
-        if (!roles.map { it.name }.contains("guest")) roles.add(
-            Claim.ClaimRole(claim.id, "guest", NamedTextColor.WHITE, ConfigHandler.config.defaultGuestPermissions)
-        )
 
         return Dialog.create {
             it.empty()

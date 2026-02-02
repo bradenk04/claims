@@ -3,6 +3,7 @@ package io.github.bradenk04.claims.domain
 import io.github.bradenk04.claims.config.ConfigHandler
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -26,14 +27,14 @@ class Claim internal constructor(
     val roles: List<ClaimRole>
         get() {
             val list = mutableListOf<ClaimRole>()
-            val ids = permissions.keys.toList()
+            val ids = permissions.keys.union(roleColors.keys)
             ids.forEach { role ->
                 list.add(
                     ClaimRole(
                         id,
                         role,
                         TextColor.fromHexString(roleColors[role] ?: "#FFFFFF"),
-                        permissions[role] ?: ConfigHandler.config.defaultGuestPermissions
+                        permissions[role] ?: setOf()
                     )
                 )
             }
@@ -41,19 +42,26 @@ class Claim internal constructor(
         }
 
     fun hasPermission(player: OfflinePlayer, permission: ClaimPermission): Boolean {
-        val role = playerRoles[player.uniqueId] ?: "guest"
+        val role = getPlayerRole(player.uniqueId)
         return getPermission(role, permission)
     }
     fun hasPermission(player: UUID, permission: ClaimPermission): Boolean {
-        val role = playerRoles[player] ?: "guest"
+        val role = getPlayerRole(player)
         return getPermission(role, permission)
     }
 
-    fun getRolePermissions(role: String): Set<ClaimPermission> = permissions[role] ?: ConfigHandler.config.defaultGuestPermissions
+    fun getRolePermissions(role: String): Set<ClaimPermission> = permissions[role] ?: setOf()
 
     fun getPermission(role: String, permission: ClaimPermission): Boolean = getRolePermissions(role).contains(permission)
 
     fun isBanned(player: OfflinePlayer): Boolean = bans.contains(player.uniqueId)
+
+    fun getPlayerRole(player: Player): String {
+        return playerRoles[player.uniqueId] ?: if (owner == player.uniqueId) "owner" else "guest"
+    }
+    fun getPlayerRole(player: UUID): String {
+        return playerRoles[player] ?: if (owner == player) "owner" else "guest"
+    }
 
     class ClaimRole(
         val claim: Int,

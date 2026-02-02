@@ -110,6 +110,12 @@ class SqlClaimRepository(
             it[ClaimRoleMetadata.color] = "#FFFFFF"
         }
 
+        ClaimRoles.insertIgnore {
+            it[ClaimRoles.claimId] = newId
+            it[ClaimRoles.player] = owner.toKotlinUuid()
+            it[ClaimRoles.role] = "owner"
+        }
+
         Claim(newId, owner, null, null, mutableSetOf(chunk))
     }
 

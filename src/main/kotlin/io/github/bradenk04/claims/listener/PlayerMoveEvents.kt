@@ -2,6 +2,7 @@ package io.github.bradenk04.claims.listener
 
 import io.github.bradenk04.claims.ClaimManager
 import io.github.bradenk04.claims.domain.ClaimPermission
+import io.github.bradenk04.claims.safeTeleport
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
@@ -82,5 +83,7 @@ class PlayerMoveEvents : Listener {
         }
 
         e.player.location.y = e.from.y
+
+        e.player.safeTeleport(e.player.location)
     }
 }

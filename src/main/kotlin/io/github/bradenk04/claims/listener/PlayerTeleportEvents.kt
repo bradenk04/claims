@@ -34,7 +34,7 @@ class PlayerTeleportEvents : Listener {
     fun cancelTeleport(e: PlayerTeleportEvent, player: Player, reason: String? = null) {
         if (ClaimPlugin.isFolia) {
             Bukkit.getServer().globalRegionScheduler.execute(ClaimPlugin.plugin) {
-                player.safeTeleport(player, e.from)
+                player.safeTeleport(e.from)
             }
         } else {
             e.isCancelled = true
