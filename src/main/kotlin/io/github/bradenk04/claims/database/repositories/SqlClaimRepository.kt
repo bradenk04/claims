@@ -190,7 +190,7 @@ class SqlClaimRepository(
             .count().toInt()
     }
 
-    override fun addChunk(claimId: Int, chunk: ChunkLocation) {
+    override fun addChunk(claimId: Int, chunk: ChunkLocation) = transaction(database) {
         try {
             ClaimChunks.insert {
                 it[ClaimChunks.claimId] = claimId
@@ -200,6 +200,7 @@ class SqlClaimRepository(
             }
         } catch (_: Exception) {
         }
+        Unit
     }
 
     override fun removeChunk(claimId: Int, chunk: ChunkLocation) {
