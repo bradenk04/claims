@@ -133,13 +133,13 @@ class SqlClaimRepository(
             .map { row -> mapRowToClaim(row, row[Claims.id]) }
     }
 
-    override fun saveClaim(claim: Claim): Boolean {
+    override fun saveClaim(claim: Claim): Boolean = transaction(database) {
         Claims.update({ Claims.id eq claim.id }) {
             it[Claims.ownerUUID] = claim.owner.toKotlinUuid()
             it[Claims.name] = claim.name
             it[Claims.description] = claim.description
         }
-        return true
+        return@transaction true
     }
 
     override fun deleteClaim(claim: Claim): Boolean {

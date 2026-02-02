@@ -6,14 +6,20 @@ import java.util.concurrent.ConcurrentHashMap
 
 class Claim internal constructor(
     val id: Int,
-    val owner: UUID,
-    val name: String?,
-    val description: String?,
+    var owner: UUID,
+    var name: String?,
+    var description: String?,
     val chunks: MutableSet<ChunkLocation>,
     val bans: Set<UUID> = emptySet(),
     val roles: ConcurrentHashMap<UUID, String> = ConcurrentHashMap(),
     val permissions: ConcurrentHashMap<String, Set<ClaimPermission>> = ConcurrentHashMap()
 ) {
+    fun getFormattedClaimName(): String {
+        if (name != null) return name!!
+        return "Claim (Chunk ${chunks.minOfOrNull { chunk -> chunk.x }}-${chunks.maxOfOrNull { chunk -> chunk.x }}-${chunks.minOfOrNull { chunk -> chunk.z }}-${chunks.maxOfOrNull { chunk -> chunk.z }})"
+
+    }
+
     private val defaultGuestPermissions = setOf<ClaimPermission>(
         ClaimPermission.ENTER_REGION
     )

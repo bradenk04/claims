@@ -2,6 +2,10 @@ package io.github.bradenk04.claims.listener
 
 import io.github.bradenk04.claims.ClaimManager
 import io.github.bradenk04.claims.domain.ClaimPermission
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -15,6 +19,8 @@ class PlayerMoveEvents : Listener {
         if (!changedBlocks(e.from, e.to)) return
 
         val claim = ClaimManager.getClaim(e.to)
+        val oldClaim = ClaimManager.getClaim(e.from)
+
         if (claim != null) {
             if (!claim.hasPermission(e.player, ClaimPermission.ENTER_REGION)) { // TODO: Check bypass
                 sendBack(e)
@@ -22,12 +28,32 @@ class PlayerMoveEvents : Listener {
             }else if (claim.isBanned(e.player)) { // TODO: Check bypass
                 sendBack(e)
                 // TODO: Send message
-            } else {
-                // TODO: Send entrance message
+            } else if (oldClaim?.id != claim.id) {
+                val claimOwner = Bukkit.getOfflinePlayer(claim.owner)
+                e.player.sendActionBar(
+                    Component.text("You have entered ").color(NamedTextColor.WHITE)
+                        .append(
+                            Component.text(claim.getFormattedClaimName()).color(NamedTextColor.GREEN)
+                        )
+                )
+                e.player.sendMessage(Component.text("You have entered ")
+                    .append(
+                        Component.text(claim.getFormattedClaimName())
+                            .hoverEvent(
+                                HoverEvent.showText(
+                                    Component
+                                        .text("Claim: ${claim.getFormattedClaimName()}")
+                                        .appendNewline()
+                                        .append(Component.text("Owner: ${claimOwner.name}"))
+                                        .appendNewline()
+                                        .append(Component.text("Description: ${claim.description}"))
+                                )
+                            )
+                    )
+                )
             }
         }
 
-        val oldClaim = ClaimManager.getClaim(e.from)
         if (oldClaim != null) {
             // TODO: Send exit message
         }

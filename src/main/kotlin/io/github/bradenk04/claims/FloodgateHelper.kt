@@ -3,6 +3,7 @@ package io.github.bradenk04.claims
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.geysermc.floodgate.api.FloodgateApi
+import org.geysermc.floodgate.api.player.FloodgatePlayer
 import java.util.UUID
 
 object FloodgateHelper {
@@ -22,5 +23,9 @@ object FloodgateHelper {
     fun isBedrockPlayer(player: UUID): Boolean {
         if (!isFloodgateServer) return false
         return floodgateApi.isFloodgatePlayer(player)
+    }
+
+    fun getPlayer(player: OfflinePlayer): FloodgatePlayer? {
+        return floodgateApi.getPlayer(player.uniqueId)
     }
 }

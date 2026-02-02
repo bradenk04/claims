@@ -8,5 +8,6 @@ object CommandHandler {
         val lamp = BukkitLamp.builder(ClaimPlugin.plugin).build()
 
         lamp.register(ClaimCommand())
+        lamp.register(ClaimsCommand())
     }
 }
