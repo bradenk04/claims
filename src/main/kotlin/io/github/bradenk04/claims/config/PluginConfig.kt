@@ -4,5 +4,27 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PluginConfig(
+    val database: DatabaseConfig
+)
 
+@Serializable
+data class DatabaseConfig(
+    val type: String,
+    val mysql: MysqlConfig,
+    val pool: PoolConfig = PoolConfig() // Default values if missing
+)
+
+@Serializable
+data class MysqlConfig(
+    val host: String = "localhost",
+    val port: Int = 3306,
+    val database: String = "claims",
+    val username: String = "root",
+    val password: String = ""
+)
+
+@Serializable
+data class PoolConfig(
+    val maximumPoolSize: Int = 10,
+    val connectionTimeout: Long = 30000
 )

@@ -1,5 +1,7 @@
 package io.github.bradenk04.claims
 
+import io.github.bradenk04.claims.config.ConfigHandler
+import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.listener.PlayerItemEvents
 import io.github.bradenk04.claims.listener.PlayerMoveEvents
 import io.github.bradenk04.claims.listener.PlayerTeleportEvents
@@ -23,7 +25,9 @@ class ClaimPlugin : JavaPlugin() {
     override fun onEnable() {
         if (!dataFolder.exists()) dataFolder.mkdirs()
         plugin = this
+        ConfigHandler.initialize()
         FloodgateHelper.setupFloodgate()
+        Database.initialize()
 
         registerListeners()
     }

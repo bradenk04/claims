@@ -8,8 +8,8 @@ import org.bukkit.Location
 import java.util.UUID
 
 interface ClaimRepository {
-    suspend fun initialize()
-    suspend fun shutdown()
+    fun initialize()
+    fun shutdown()
 
     fun getClaim(id: Int): Claim?
     fun getClaim(loc: Location): Claim?

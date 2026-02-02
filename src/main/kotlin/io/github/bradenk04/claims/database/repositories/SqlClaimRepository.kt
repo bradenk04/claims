@@ -4,7 +4,8 @@ package io.github.bradenk04.claims.database.repositories
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.github.bradenk04.claims.database.DatabaseConfig
+import io.github.bradenk04.claims.config.ConfigHandler
+import io.github.bradenk04.claims.database.PluginDatabaseConfig
 import io.github.bradenk04.claims.database.models.ClaimBans
 import io.github.bradenk04.claims.database.models.ClaimChunks
 import io.github.bradenk04.claims.database.models.ClaimPermissions
@@ -32,21 +33,21 @@ import kotlin.uuid.toJavaUuid
 import kotlin.uuid.toKotlinUuid
 
 class SqlClaimRepository(
-    private val config: DatabaseConfig
+    private val config: PluginDatabaseConfig
 ) : ClaimRepository {
     private lateinit var dataSource: HikariDataSource
     private lateinit var database: Database
 
-    override suspend fun initialize() {
+    override fun initialize() {
         val hikariConfig = HikariConfig().apply {
             jdbcUrl = config.url
             driverClassName = config.driver
             username = config.username
             password = config.password
 
-            maximumPoolSize = 10
+            maximumPoolSize = ConfigHandler.config.database.pool.maximumPoolSize
             minimumIdle = 2
-            connectionTimeout = 30000
+            connectionTimeout = ConfigHandler.config.database.pool.connectionTimeout
 
             addDataSourceProperty("cachePrepStmts", "true")
             addDataSourceProperty("prepStmtCacheSize", "250")
@@ -60,7 +61,7 @@ class SqlClaimRepository(
         }
     }
 
-    override suspend fun shutdown() {
+    override fun shutdown() {
         if (::dataSource.isInitialized) dataSource.close()
     }
 
