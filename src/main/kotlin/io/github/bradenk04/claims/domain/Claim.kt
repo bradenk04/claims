@@ -1,5 +1,6 @@
 package io.github.bradenk04.claims.domain
 
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.OfflinePlayer
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -11,8 +12,9 @@ class Claim internal constructor(
     var description: String?,
     val chunks: MutableSet<ChunkLocation>,
     val bans: Set<UUID> = emptySet(),
-    val roles: ConcurrentHashMap<UUID, String> = ConcurrentHashMap(),
-    val permissions: ConcurrentHashMap<String, Set<ClaimPermission>> = ConcurrentHashMap()
+    val playerRoles: ConcurrentHashMap<UUID, String> = ConcurrentHashMap(),
+    val permissions: ConcurrentHashMap<String, Set<ClaimPermission>> = ConcurrentHashMap(),
+    val roleColors: ConcurrentHashMap<String, String> = ConcurrentHashMap()
 ) {
     fun getFormattedClaimName(): String {
         if (name != null) return name!!
@@ -20,15 +22,32 @@ class Claim internal constructor(
 
     }
 
-    private val defaultGuestPermissions = setOf<ClaimPermission>(
+    val roles: List<ClaimRole>
+        get() {
+            val list = mutableListOf<ClaimRole>()
+            val ids = permissions.keys.toList()
+            ids.forEach { role ->
+                list.add(
+                    ClaimRole(
+                        id,
+                        role,
+                        TextColor.fromHexString(roleColors[role] ?: "#FFFFFF"),
+                        permissions[role] ?: if (role == "owner") defaultGuestPermissions else defaultGuestPermissions
+                    )
+                )
+            }
+            return list
+        }
+
+    internal val defaultGuestPermissions = setOf<ClaimPermission>(
         ClaimPermission.ENTER_REGION
     )
     fun hasPermission(player: OfflinePlayer, permission: ClaimPermission): Boolean {
-        val role = roles[player.uniqueId] ?: "guest"
+        val role = playerRoles[player.uniqueId] ?: "guest"
         return getPermission(role, permission)
     }
     fun hasPermission(player: UUID, permission: ClaimPermission): Boolean {
-        val role = roles[player] ?: "guest"
+        val role = playerRoles[player] ?: "guest"
         return getPermission(role, permission)
     }
 
@@ -37,6 +56,13 @@ class Claim internal constructor(
     fun getPermission(role: String, permission: ClaimPermission): Boolean = getRolePermissions(role).contains(permission)
 
     fun isBanned(player: OfflinePlayer): Boolean = bans.contains(player.uniqueId)
+
+    class ClaimRole(
+        val claim: Int,
+        val name: String,
+        val color: TextColor?,
+        val permissions: Set<ClaimPermission>
+    )
 }
 
 data class ChunkLocation(val world: UUID, val x: Int, val z: Int)

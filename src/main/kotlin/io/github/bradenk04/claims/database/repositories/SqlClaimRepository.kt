@@ -9,6 +9,7 @@ import io.github.bradenk04.claims.database.PluginDatabaseConfig
 import io.github.bradenk04.claims.database.models.ClaimBans
 import io.github.bradenk04.claims.database.models.ClaimChunks
 import io.github.bradenk04.claims.database.models.ClaimPermissions
+import io.github.bradenk04.claims.database.models.ClaimRoleMetadata
 import io.github.bradenk04.claims.database.models.ClaimRoles
 import io.github.bradenk04.claims.database.models.Claims
 import io.github.bradenk04.claims.domain.ChunkLocation
@@ -24,10 +25,12 @@ import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.insertIgnore
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
+import org.jetbrains.exposed.v1.jdbc.upsert
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.uuid.ExperimentalUuidApi
@@ -59,7 +62,7 @@ class SqlClaimRepository(
         dataSource = HikariDataSource(hikariConfig)
         database = Database.connect(dataSource)
         transaction(database) {
-            SchemaUtils.create(Claims, ClaimChunks, ClaimRoles, ClaimPermissions, ClaimBans)
+            SchemaUtils.create(Claims, ClaimChunks, ClaimRoles, ClaimPermissions, ClaimBans, ClaimRoleMetadata)
         }
     }
 
@@ -183,18 +186,33 @@ class SqlClaimRepository(
         }
     }
 
-    override fun addPermission(claimId: Int, role: String, permission: String) = transaction(database) {
-        val exists = ClaimPermissions.selectAll()
-        .where { (ClaimPermissions.claimId eq claimId) and (ClaimPermissions.role eq role) and (ClaimPermissions.permission eq permission) }
-        .count() > 0
+    override fun deleteRole(claimId: Int, role: String) = transaction(database) {
+        ClaimRoleMetadata.deleteWhere { (ClaimRoleMetadata.claimId eq claimId) and (ClaimRoleMetadata.role eq role) }
+        ClaimPermissions.deleteWhere { (ClaimPermissions.claimId eq claimId) and (ClaimPermissions.role eq role) }
+        Unit
+    }
 
-        if (!exists) {
-            ClaimPermissions.insert {
-                it[ClaimPermissions.claimId] = claimId
-                it[ClaimPermissions.role] = role
-                it[ClaimPermissions.permission] = permission
-            }
+    override fun addPermission(claimId: Int, role: String, permission: String) = transaction(database) {
+        ClaimPermissions.insertIgnore {
+            it[ClaimPermissions.claimId] = claimId
+            it[ClaimPermissions.role] = role
+            it[ClaimPermissions.permission] = permission
         }
+        Unit
+    }
+
+    override fun removePermission(claimId: Int, role: String, permission: String) = transaction(database) {
+        ClaimPermissions.deleteWhere { (ClaimPermissions.claimId eq claimId) and (ClaimPermissions.role eq role) and (ClaimPermissions.permission eq permission) }
+        Unit
+    }
+
+    override fun setRoleColor(claimId: Int, role: String, color: String) = transaction(database) {
+        ClaimRoleMetadata.upsert {
+            it[ClaimRoleMetadata.claimId] = claimId
+            it[ClaimRoleMetadata.role] = role
+            it[ClaimRoleMetadata.color] = color
+        }
+        Unit
     }
 
     override fun banPlayer(claimId: Int, user: UUID) = transaction(database) {
@@ -218,10 +236,12 @@ class SqlClaimRepository(
             name = row[Claims.name],
             description = row[Claims.description],
             chunks = fetchChunks(claimId),
-            roles = fetchRoles(claimId),
+            playerRoles = fetchRoles(claimId),
             permissions = fetchPermissions(claimId),
-            bans = fetchBans(claimId)
-
+            bans = fetchBans(claimId),
+            roleColors = ConcurrentHashMap(fetchRoleMetadata(claimId).associate {
+                it.name to it.color
+            })
         )
     }
 
@@ -251,6 +271,20 @@ class SqlClaimRepository(
             }
         return ConcurrentHashMap(map.mapValues { it.value.toSet() })
     }
+
+    private fun fetchRoleMetadata(claim: Int): Set<RoleMetadata> {
+        return ClaimRoleMetadata.selectAll().where {
+            (ClaimRoleMetadata.claimId eq claim)
+        }.map {
+            RoleMetadata(
+                name = it[ClaimRoleMetadata.role],
+                claim = claim,
+                color = it[ClaimRoleMetadata.color]
+            )
+        }.toSet()
+    }
+
+    private data class RoleMetadata(val claim: Int, val name: String, val color: String?)
 
     private fun fetchBans(id: Int): MutableSet<UUID> {
         return ClaimBans.selectAll()

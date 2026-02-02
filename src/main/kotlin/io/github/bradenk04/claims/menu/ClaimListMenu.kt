@@ -4,6 +4,7 @@ import io.github.bradenk04.claims.ClaimManager
 import io.github.bradenk04.claims.FloodgateHelper
 import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.domain.Claim
+import io.github.bradenk04.claims.menu.ClaimRoleDialog.getRoleDialog
 import io.papermc.paper.dialog.Dialog
 import io.papermc.paper.registry.data.dialog.ActionButton
 import io.papermc.paper.registry.data.dialog.DialogBase
@@ -78,8 +79,12 @@ object ClaimListMenu {
                 ))
                 .build())
             .type(DialogType.multiAction(listOf(
-                ActionButton.builder(Component.text("Players Roles")).build(),
-                ActionButton.builder(Component.text("Edit Role Permissions")).build(),
+                ActionButton.builder(Component.text("Players Roles"))
+                    .build(),
+                ActionButton
+                    .builder(Component.text("Edit Role Permissions"))
+                    .action(DialogAction.staticAction(ClickEvent.showDialog(ClaimRoleDialog.getDialog(player, claim))))
+                    .build(),
                 ActionButton.builder(Component.text("Banned Players")).build(),
                 ActionButton
                     .builder(Component.text("Save Claim").color(NamedTextColor.GREEN))

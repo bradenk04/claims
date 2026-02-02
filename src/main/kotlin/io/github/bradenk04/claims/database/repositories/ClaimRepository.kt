@@ -24,6 +24,9 @@ interface ClaimRepository {
     fun addChunk(claimId: Int, chunk: ChunkLocation)
     fun removeChunk(claimId: Int, chunk: ChunkLocation)
     fun setRole(claimId: Int, user: UUID, role: String)
+    fun deleteRole(claimId: Int, role: String)
     fun addPermission(claimId: Int, role: String, permission: String)
+    fun removePermission(claimId: Int, role: String, permission: String)
+    fun setRoleColor(claimId: Int, role: String, color: String)
     fun banPlayer(claimId: Int, user: UUID)
 }

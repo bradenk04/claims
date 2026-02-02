@@ -37,6 +37,13 @@ object ClaimPermissions : Table("claim_permissions") {
     override val primaryKey = PrimaryKey(claimId, role, permission)
 }
 
+object ClaimRoleMetadata : Table("claim_role_metadata") {
+    val claimId = reference("claim_id", Claims.id, onDelete = ReferenceOption.CASCADE)
+    val role = varchar("role", 32)
+    val color = varchar("color", 32).nullable()
+    override val primaryKey = PrimaryKey(claimId, role)
+}
+
 @OptIn(ExperimentalUuidApi::class)
 object ClaimBans : Table("claim_bans") {
     val claimId = reference("claim_id", Claims.id, onDelete = ReferenceOption.CASCADE)
