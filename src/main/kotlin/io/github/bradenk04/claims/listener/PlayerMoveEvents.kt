@@ -1,6 +1,7 @@
 package io.github.bradenk04.claims.listener
 
 import io.github.bradenk04.claims.ClaimManager
+import io.github.bradenk04.claims.ClaimPlugin
 import io.github.bradenk04.claims.domain.ClaimPermission
 import io.github.bradenk04.claims.safeTeleport
 import net.kyori.adventure.text.Component
@@ -68,22 +69,26 @@ class PlayerMoveEvents : Listener {
     }
 
     fun sendBack(e: PlayerMoveEvent) {
+        e.isCancelled = true
+        val loc = e.player.location.clone()
         val xDelta = e.from.blockX - e.to.blockX
         val zDelta = e.from.blockZ - e.to.blockZ
         if (xDelta > 0) {
-            e.player.location.x = e.from.x - 3
+            loc.x = e.from.x - 3
         } else if (xDelta < 0) {
-            e.player.location.x = e.from.x + 3
+            loc.x = e.from.x + 3
         }
 
         if (zDelta > 0) {
-            e.player.location.z = e.from.z - 3
+            loc.z = e.from.z - 3
         } else if (zDelta < 0) {
-            e.player.location.z = e.from.z + 3
+            loc.z = e.from.z + 3
         }
 
-        e.player.location.y = e.from.y
+        loc.y = e.from.y
 
-        e.player.safeTeleport(e.player.location)
+        Bukkit.getRegionScheduler().run(ClaimPlugin.plugin, loc) {
+            e.player.safeTeleport(loc)
+        }
     }
 }
