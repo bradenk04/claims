@@ -13,8 +13,10 @@ jobs:
           java-version: '21'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+      - name: Make gradlew executable
+        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew shadowJar
+        run: ./gradlew build
       - name: Send Jar to Discord
         if: success()
         env:
@@ -22,7 +24,6 @@ jobs:
         run: |
           JAR_FILE=$(ls build/libs/*-reobf.jar | head -n 1)
           
-          # Send file via curl
           curl -v -F "payload_json={\"content\": \"✅ **Build Successful!**\nHere is the latest plugin build:\"}" \
                -F "file=@$JAR_FILE" \
                $DISCORD_WEBHOOK
