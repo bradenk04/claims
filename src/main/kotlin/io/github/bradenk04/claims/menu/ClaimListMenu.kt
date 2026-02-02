@@ -30,6 +30,10 @@ object ClaimListMenu {
                 .title("Your Claims")
 
             val claims = Database.claims.getUsersClaims(player.uniqueId)
+            if (claims.count() < 1) {
+                player.sendMessage(Component.text("You have no claims! Do /claim to make a claim").color(NamedTextColor.RED))
+                return
+            }
             menu.dropdown("Claim", claims.map { it.getFormattedClaimName() })
 
 
@@ -43,6 +47,10 @@ object ClaimListMenu {
             brPlayer.sendForm(menu.build())
         } else {
             val claims = Database.claims.getUsersClaims(player.uniqueId)
+            if (claims.count() < 1) {
+                player.sendMessage(Component.text("You have no claims! Do /claim to make a claim").color(NamedTextColor.RED))
+                return
+            }
             val actions = claims.map {
                 ActionButton.builder(Component.text(it.getFormattedClaimName())).action(DialogAction.staticAction(
                     ClickEvent.showDialog(getClaimDialog(player, it))
