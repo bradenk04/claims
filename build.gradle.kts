@@ -24,6 +24,10 @@ dependencies {
     compileOnly(libs.ktoml.file)
     compileOnly(libs.lamp.common)
     compileOnly(libs.lamp.paper)
+    compileOnly(libs.exposed.core)
+    compileOnly(libs.exposed.jdbc)
+    compileOnly(libs.exposed.dao)
+    compileOnly(libs.hikaricp)
 
     // Plugin Dependencies
     compileOnly(libs.floodgate.api)
@@ -39,6 +43,8 @@ paperweight {
 val kotlinVersion: String = libs.versions.kotlin.get() ?: "2.3.0"
 val ktomlVersion = libs.versions.ktoml.get() ?: "0.7.1"
 val lampVersion = libs.versions.lamp.get() ?: "4.0.0-rc.14"
+val exposedVersion = libs.versions.exposed.get() ?: "1.0.0"
+val hikaricpVersion = libs.versions.hikaricp.get() ?: "7.0.2"
 
 tasks {
     withType<JavaCompile> {
@@ -55,6 +61,8 @@ tasks {
         inputs.property("kotlinVersion", kotlinVersion)
         inputs.property("ktomlVersion", ktomlVersion)
         inputs.property("lampVersion", lampVersion)
+        inputs.property("exposedVersion", exposedVersion)
+        inputs.property("hikaricpVersion", hikaricpVersion)
 
         filesMatching("plugin.yml") {
             expand("version" to project.version)
@@ -64,7 +72,9 @@ tasks {
             expand(
                 "kotlinVersion" to kotlinVersion,
                 "ktomlVersion" to ktomlVersion,
-                "lampVersion" to lampVersion
+                "lampVersion" to lampVersion,
+                "exposedVersion" to exposedVersion,
+                "hikaricpVersion" to hikaricpVersion
             )
         }
     }

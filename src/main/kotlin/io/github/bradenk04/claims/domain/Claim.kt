@@ -4,8 +4,8 @@ import org.bukkit.OfflinePlayer
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-class Claim private constructor(
-    val id: UUID,
+class Claim internal constructor(
+    val id: Int,
     val owner: UUID,
     val name: String?,
     val description: String?,

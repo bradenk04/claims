@@ -37,6 +37,8 @@ public class PluginLoader implements io.papermc.paper.plugin.loader.PluginLoader
                 null
         ));
 
+        DatabaseLoader.loadDatabaseDependencies(DatabaseLoader.getDatabaseType(), resolver, versions);
+
         pluginClasspathBuilder.addLibrary(resolver);
     }
 }

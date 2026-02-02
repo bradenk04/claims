@@ -1,5 +1,9 @@
 package io.github.bradenk04.claims;
 
+import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.Dependency;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,5 +35,28 @@ class DatabaseLoader {
             e.printStackTrace();
         }
         return DatabaseType.SQLITE;
+    }
+
+    static void loadDatabaseDependencies(DatabaseType type, MavenLibraryResolver resolver, VersionsLoader versions) {
+        switch (type) {
+            case POSTGRESQL, MYSQL, SQLITE:
+                resolver.addDependency(new Dependency(
+                        new DefaultArtifact("org.jetbrains.exposed:exposed-core:" + versions.exposedVersion),
+                        null
+                ));
+                resolver.addDependency(new Dependency(
+                        new DefaultArtifact("org.jetbrains.exposed:exposed-jdbc:" + versions.exposedVersion),
+                        null
+                ));
+                resolver.addDependency(new Dependency(
+                        new DefaultArtifact("org.jetbrains.exposed:exposed-dao:" + versions.exposedVersion),
+                        null
+                ));
+                resolver.addDependency(new Dependency(
+                        new DefaultArtifact("com.zaxxer:HikariCP:" + versions.hikaricpVersion),
+                        null
+                ));
+                break;
+        }
     }
 }

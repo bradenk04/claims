@@ -4,6 +4,8 @@ kotlin = "2.3.0"
 ktoml = "0.7.1"
 floodgate = "2.2.4-SNAPSHOT"
 lamp = "4.0.0-rc.14"
+exposed = "1.0.0"
+hikaricp = "7.0.2"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -16,3 +18,7 @@ ktoml-file = { module = "com.akuleshov7:ktoml-file", version.ref = "ktoml" }
 floodgate-api = { module = "org.geysermc.floodgate:api", version.ref = "floodgate" }
 lamp-common = { module = "io.github.revxrsal:lamp.common", version.ref = "lamp" }
 lamp-paper = { module = "io.github.revxrsal:lamp.bukkit", version.ref = "lamp" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed"}
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed"}
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed"}
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
