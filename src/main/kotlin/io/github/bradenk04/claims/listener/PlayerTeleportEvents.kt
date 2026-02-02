@@ -39,6 +39,5 @@ class PlayerTeleportEvents : Listener {
         } else {
             e.isCancelled = true
         }
-        TODO("Send message")
     }
 }
