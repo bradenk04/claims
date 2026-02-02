@@ -1,5 +1,6 @@
 package io.github.bradenk04.claims.domain
 
+import io.github.bradenk04.claims.config.ConfigHandler
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.OfflinePlayer
 import java.util.UUID
@@ -32,16 +33,13 @@ class Claim internal constructor(
                         id,
                         role,
                         TextColor.fromHexString(roleColors[role] ?: "#FFFFFF"),
-                        permissions[role] ?: if (role == "owner") defaultGuestPermissions else defaultGuestPermissions
+                        permissions[role] ?: ConfigHandler.config.defaultGuestPermissions
                     )
                 )
             }
             return list
         }
 
-    internal val defaultGuestPermissions = setOf<ClaimPermission>(
-        ClaimPermission.ENTER_REGION
-    )
     fun hasPermission(player: OfflinePlayer, permission: ClaimPermission): Boolean {
         val role = playerRoles[player.uniqueId] ?: "guest"
         return getPermission(role, permission)
@@ -51,7 +49,7 @@ class Claim internal constructor(
         return getPermission(role, permission)
     }
 
-    fun getRolePermissions(role: String): Set<ClaimPermission> = permissions[role] ?: defaultGuestPermissions
+    fun getRolePermissions(role: String): Set<ClaimPermission> = permissions[role] ?: ConfigHandler.config.defaultGuestPermissions
 
     fun getPermission(role: String, permission: ClaimPermission): Boolean = getRolePermissions(role).contains(permission)
 

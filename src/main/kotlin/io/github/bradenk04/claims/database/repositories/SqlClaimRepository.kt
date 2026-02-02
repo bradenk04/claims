@@ -82,6 +82,34 @@ class SqlClaimRepository(
             it[ClaimChunks.z] = chunk.z
         }
 
+        ClaimPermission.entries.forEach { perm ->
+            ClaimPermissions.insertIgnore {
+                it[ClaimPermissions.claimId] = newId
+                it[ClaimPermissions.role] = "owner"
+                it[ClaimPermissions.permission] = perm.toString()
+            }
+        }
+
+        ClaimRoleMetadata.insertIgnore {
+            it[ClaimRoleMetadata.claimId] = newId
+            it[ClaimRoleMetadata.role] = "owner"
+            it[ClaimRoleMetadata.color] = "#FF0000"
+        }
+
+        ConfigHandler.config.defaultGuestPermissions.forEach { perm ->
+            ClaimPermissions.insertIgnore {
+                it[ClaimPermissions.claimId] = newId
+                it[ClaimPermissions.role] = "guest"
+                it[ClaimPermissions.permission] = perm.toString()
+            }
+        }
+
+        ClaimRoleMetadata.insertIgnore {
+            it[ClaimRoleMetadata.claimId] = newId
+            it[ClaimRoleMetadata.role] = "guest"
+            it[ClaimRoleMetadata.color] = "#FFFFFF"
+        }
+
         Claim(newId, owner, null, null, mutableSetOf(chunk))
     }
 

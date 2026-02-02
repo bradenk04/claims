@@ -1,5 +1,6 @@
 package io.github.bradenk04.claims.menu
 
+import io.github.bradenk04.claims.config.ConfigHandler
 import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.domain.Claim
 import io.github.bradenk04.claims.domain.ClaimPermission
@@ -23,7 +24,7 @@ object ClaimRoleDialog {
             roles.add(Claim.ClaimRole(claim.id, "owner", NamedTextColor.RED, ClaimPermission.entries.toSet()))
         }
         if (!roles.map { it.name }.contains("guest")) roles.add(
-            Claim.ClaimRole(claim.id, "guest", NamedTextColor.WHITE, claim.defaultGuestPermissions)
+            Claim.ClaimRole(claim.id, "guest", NamedTextColor.WHITE, ConfigHandler.config.defaultGuestPermissions)
         )
 
         return Dialog.create {
@@ -128,7 +129,7 @@ object ClaimRoleDialog {
             val permId = it.name.lowercase()
             DialogInput
                 .bool("perm_$permId", Component.text(permId.replace("_", " ").capitalize()))
-                .initial(claim.defaultGuestPermissions.contains(it))
+                .initial(ConfigHandler.config.defaultGuestPermissions.contains(it))
                 .onTrue("true")
                 .onFalse("false")
                 .build()

@@ -1,10 +1,14 @@
 package io.github.bradenk04.claims.config
 
+import io.github.bradenk04.claims.domain.ClaimPermission
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PluginConfig(
-    val database: DatabaseConfig = DatabaseConfig("sqlite")
+    val database: DatabaseConfig = DatabaseConfig("sqlite"),
+    val defaultGuestPermissions: Set<ClaimPermission> = setOf(
+        ClaimPermission.ENTER_REGION
+    )
 )
 
 @Serializable
