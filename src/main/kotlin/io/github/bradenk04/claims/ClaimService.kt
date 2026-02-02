@@ -48,7 +48,7 @@ class ClaimService(
         } else {
             val playersClaims = repository.getUsersClaimCount(claimer.uniqueId)
             // TODO: Implement permission check.
-            if (playersClaims > 0 && !claimer.isOnline) {
+            if (playersClaims > 0 && !claimer.isOp) {
                 ClaimResult.NoPermission("Reached max claims", true)
             } else {
                 val newClaim = repository.createClaim(claimer.uniqueId, chunk)
