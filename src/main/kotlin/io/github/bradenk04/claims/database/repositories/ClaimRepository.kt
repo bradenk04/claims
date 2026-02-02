@@ -11,11 +11,15 @@ interface ClaimRepository {
     fun initialize()
     fun shutdown()
 
+    fun createClaim(owner: UUID, chunk: ChunkLocation): Claim
     fun getClaim(id: Int): Claim?
     fun getClaim(loc: Location): Claim?
+    fun getClaim(loc: ChunkLocation): Claim?
+    fun getClaims(locations: List<ChunkLocation>): List<Claim>
     fun getUsersClaims(player: UUID): List<Claim>
     fun saveClaim(claim: Claim): Boolean
     fun deleteClaim(claim: Claim): Boolean
+    fun getUsersClaimCount(player: UUID): Int
 
     fun addChunk(claimId: Int, chunk: ChunkLocation)
     fun removeChunk(claimId: Int, chunk: ChunkLocation)

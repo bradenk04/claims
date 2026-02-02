@@ -1,5 +1,6 @@
 package io.github.bradenk04.claims
 
+import io.github.bradenk04.claims.domain.ChunkLocation
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -17,3 +18,5 @@ fun Player.safeTeleport(player: Player, loc: Location) {
         }
     } else if (player.isOnline && !player.isDead) player.teleport(loc)
 }
+
+fun Location.toChunkLocation() = ChunkLocation(this.world.uid, this.chunk.x, this.chunk.z)

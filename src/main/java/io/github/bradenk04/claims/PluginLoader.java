@@ -17,15 +17,15 @@ public class PluginLoader implements io.papermc.paper.plugin.loader.PluginLoader
         resolver.addRepository(new RemoteRepository.Builder("central", "default", MavenLibraryResolver.MAVEN_CENTRAL_DEFAULT_MIRROR).build());
 
         resolver.addDependency(new Dependency(
-                new DefaultArtifact("org.jetbrains.kotlin-stdlib:" + versions.kotlinVersion),
+                new DefaultArtifact("org.jetbrains.kotlin:kotlin-stdlib:" + versions.kotlinVersion),
                 null
         ));
         resolver.addDependency(new Dependency(
-                new DefaultArtifact("com.akuleshov7:ktoml-core:" + versions.ktomlVersion),
+                new DefaultArtifact("com.akuleshov7:ktoml-core-jvm:" + versions.ktomlVersion),
                 null
         ));
         resolver.addDependency(new Dependency(
-                new DefaultArtifact("com.akuleshov7:ktoml-file:" + versions.ktomlVersion),
+                new DefaultArtifact("com.akuleshov7:ktoml-file-jvm:" + versions.ktomlVersion),
                 null
         ));
         resolver.addDependency(new Dependency(

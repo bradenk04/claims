@@ -18,6 +18,8 @@ import org.bukkit.Location
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
@@ -65,6 +67,21 @@ class SqlClaimRepository(
         if (::dataSource.isInitialized) dataSource.close()
     }
 
+    override fun createClaim(owner: UUID, chunk: ChunkLocation): Claim = transaction(database) {
+        val newId = Claims.insert {
+            it[Claims.ownerUUID] = owner.toKotlinUuid()
+        }[Claims.id]
+
+        ClaimChunks.insert {
+            it[ClaimChunks.claimId] = newId
+            it[ClaimChunks.worldUuid] = chunk.world.toKotlinUuid()
+            it[ClaimChunks.x] = chunk.x
+            it[ClaimChunks.z] = chunk.z
+        }
+
+        Claim(newId, owner, null, null, mutableSetOf(chunk))
+    }
+
     override fun getClaim(id: Int): Claim? = transaction(database) {
         val row = Claims.selectAll().where { Claims.id eq id }.singleOrNull() ?: return@transaction null
         mapRowToClaim(row, id)
@@ -78,6 +95,36 @@ class SqlClaimRepository(
             ?.get(ClaimChunks.claimId) ?: return@transaction null
 
         getClaim(claimId)
+    }
+
+    override fun getClaim(loc: ChunkLocation): Claim? = transaction(database) {
+        val claimId = ClaimChunks
+            .select(ClaimChunks.claimId)
+            .where { (ClaimChunks.worldUuid eq loc.world.toKotlinUuid()) and (ClaimChunks.x eq loc.x) and (ClaimChunks.z eq loc.z) }
+            .singleOrNull()
+            ?.get(ClaimChunks.claimId) ?: return@transaction null
+
+        getClaim(claimId)
+    }
+
+    override fun getClaims(locations: List<ChunkLocation>): List<Claim> = transaction(database) {
+        if (locations.isEmpty()) return@transaction emptyList()
+
+        val condition = locations
+            .map { (ClaimChunks.worldUuid eq it.world.toKotlinUuid()) and (ClaimChunks.x eq it.x) and (ClaimChunks.z eq it.z) }
+            .reduce { acc, next -> acc or next }
+
+        val claimIds = ClaimChunks
+            .select(ClaimChunks.claimId)
+            .where { condition }
+            .map { it[ClaimChunks.claimId] }
+            .distinct()
+
+        if (claimIds.isEmpty()) return@transaction emptyList()
+
+        Claims.selectAll()
+            .where { Claims.id inList claimIds }
+            .map { mapRowToClaim(it, it[Claims.id]) }
     }
 
     override fun getUsersClaims(player: UUID): List<Claim>  = transaction(database) {
@@ -98,6 +145,12 @@ class SqlClaimRepository(
     override fun deleteClaim(claim: Claim): Boolean {
         Claims.deleteWhere { Claims.id eq claim.id }
         return true
+    }
+
+    override fun getUsersClaimCount(player: UUID): Int = transaction(database) {
+        Claims.selectAll()
+            .where { Claims.ownerUUID eq player.toKotlinUuid() }
+            .count().toInt()
     }
 
     override fun addChunk(claimId: Int, chunk: ChunkLocation) {

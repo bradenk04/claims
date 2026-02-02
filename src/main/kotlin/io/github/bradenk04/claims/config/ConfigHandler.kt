@@ -11,7 +11,12 @@ object ConfigHandler {
         val dataFolder = ClaimPlugin.plugin.dataFolder
 
         val pluginConfigFile = File(dataFolder, "config.toml")
-        if (!pluginConfigFile.exists()) pluginConfigFile.createNewFile()
+        if (!pluginConfigFile.exists()) {
+            pluginConfigFile.createNewFile()
+            pluginConfigFile.writeText(TomlFileReader.encodeToString(PluginConfig.serializer(), PluginConfig(
+                database = DatabaseConfig(type = "sqlite")
+            )))
+        }
 
         config = TomlFileReader.decodeFromFile<PluginConfig>(PluginConfig.serializer(), pluginConfigFile.absolutePath)
     }

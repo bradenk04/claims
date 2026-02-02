@@ -1,5 +1,5 @@
 name: Claims
-version: ${project.version}
+version: ${version}
 main: io.github.bradenk04.claims.ClaimPlugin
 description: Claim plugin for PaperMC & Folia
 api-version: 1.21.11

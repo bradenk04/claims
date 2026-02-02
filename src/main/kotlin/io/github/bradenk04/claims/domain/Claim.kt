@@ -18,6 +18,10 @@ class Claim internal constructor(
         val role = roles[player.uniqueId] ?: "guest"
         return getPermission(role, permission)
     }
+    fun hasPermission(player: UUID, permission: ClaimPermission): Boolean {
+        val role = roles[player] ?: "guest"
+        return getPermission(role, permission)
+    }
 
     fun getPermission(role: String, permission: ClaimPermission): Boolean = permissions[role]?.contains(permission) ?: false
 

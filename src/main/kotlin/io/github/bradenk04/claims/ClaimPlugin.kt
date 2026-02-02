@@ -1,5 +1,6 @@
 package io.github.bradenk04.claims
 
+import io.github.bradenk04.claims.command.CommandHandler
 import io.github.bradenk04.claims.config.ConfigHandler
 import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.listener.PlayerItemEvents
@@ -11,6 +12,7 @@ class ClaimPlugin : JavaPlugin() {
     companion object {
         lateinit var plugin: ClaimPlugin
         var isFolia = getIsFolia()
+        lateinit var claimService: ClaimService
 
         private fun getIsFolia(): Boolean {
             try {
@@ -29,7 +31,9 @@ class ClaimPlugin : JavaPlugin() {
         FloodgateHelper.setupFloodgate()
         Database.initialize()
 
+        claimService = ClaimService(Database.claims)
         registerListeners()
+        CommandHandler.setup()
     }
 
     fun registerListeners() {

@@ -4,13 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PluginConfig(
-    val database: DatabaseConfig
+    val database: DatabaseConfig = DatabaseConfig("sqlite")
 )
 
 @Serializable
 data class DatabaseConfig(
     val type: String,
-    val mysql: MysqlConfig,
+    val mysql: MysqlConfig = MysqlConfig(),
     val pool: PoolConfig = PoolConfig() // Default values if missing
 )
 

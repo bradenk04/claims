@@ -12,6 +12,7 @@ group = "io.github.bradenk04"
 version = "0.0.1"
 
 repositories {
+    mavenCentral()
     maven("https://repo.opencollab.dev/main/")
 }
 
@@ -58,13 +59,14 @@ tasks {
     }
 
     processResources {
+        inputs.property("version", project.version)
         inputs.property("kotlinVersion", kotlinVersion)
         inputs.property("ktomlVersion", ktomlVersion)
         inputs.property("lampVersion", lampVersion)
         inputs.property("exposedVersion", exposedVersion)
         inputs.property("hikaricpVersion", hikaricpVersion)
 
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand("version" to project.version)
         }
 
