@@ -1,6 +1,17 @@
-# Claims
-Claims is a versatile plugin that lets players claim land to protect their builds.
-Supports many different databases to suite your deployment needs.
+
+<div align="center" id="user-content-toc">
+    <summary><h1>Claims</h1></summary>
+    <p>
+        Claims is a versatile plugin that lets players claim land to protect their builds.<br>
+        Supports many different databases to suite your deployment needs.
+    </p>
+    <div>
+        <img alt="bStats Servers" src="https://img.shields.io/bstats/servers/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288">
+        <img alt="bStats Players" src="https://img.shields.io/bstats/players/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288">
+    </div>
+</div>
+
+---
 
 ## Compatibility
 | Software   | Supported | Minecraft Version |
