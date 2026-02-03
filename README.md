@@ -1,6 +1,6 @@
 
 <div align="center" id="user-content-toc">
-    <summary><h1>Claims</h1></summary>
+    <ul><summary><h1>Claims</h1></summary></ul>
     <p>
         Claims is a versatile plugin that lets players claim land to protect their builds.<br>
         Supports many different databases to suite your deployment needs.
