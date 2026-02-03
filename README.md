@@ -6,9 +6,10 @@
         Supports many different databases to suite your deployment needs.
     </p>
     <div>
-        <img alt="bStats Servers" src="https://img.shields.io/bstats/servers/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288">
-        <img alt="bStats Players" src="https://img.shields.io/bstats/players/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288">
-    </div>
+        <a href="https://bstats.org/plugin/bukkit/Claims/29288" target="_blank" rel="noopener noreferrer"><img alt="bStats Servers" src="https://img.shields.io/bstats/servers/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288"></a>
+        <a href="https://bstats.org/plugin/bukkit/Claims/29288" target="_blank" rel="noopener noreferrer"><img alt="bStats Players" src="https://img.shields.io/bstats/players/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288"></a>
+        <a href="https://discord.gg/MRB9kvSuhW" target="_blank" rel="noopener noreferrer"><img alt="Discord" src="https://img.shields.io/discord/1467775220260798559?style=for-the-badge"></a>
+</div>
 </div>
 
 ---
