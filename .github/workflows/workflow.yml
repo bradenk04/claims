@@ -1,5 +1,13 @@
 name: Build & Notify
-on: [push, pull_request]
+on:
+  push:
+    paths: &build-trigger-paths
+      - 'src/**'
+      - 'gradle/libs.versions.toml'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+  pull_request:
+    paths: *build-trigger-paths
 jobs:
   build:
     runs-on: ubuntu-latest
