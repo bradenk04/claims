@@ -25,6 +25,7 @@ object ConfigHandler {
         val languageStr = config.language
         val langFile = File(dataFolder, "lang/$languageStr.toml")
         if (!langFile.exists()) {
+            langFile.mkdirs()
             langFile.createNewFile()
             langFile.writeText(TomlFileReader.encodeToString(LanguageConfig.serializer(), LanguageConfig()))
         }
