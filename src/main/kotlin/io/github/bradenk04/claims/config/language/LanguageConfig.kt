@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class LanguageConfig(
     @TomlComments(
         "Claim related messages, MiniMessage format supported.",
-        "You can view minimessage syntax here: "
+        "You can view minimessage syntax here: https://docs.papermc.io/adventure/minimessage/format/"
     )
     var claimLanguage: ClaimLanguage = ClaimLanguage()
 )

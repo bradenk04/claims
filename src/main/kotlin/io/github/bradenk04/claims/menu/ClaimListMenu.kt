@@ -1,15 +1,12 @@
 package io.github.bradenk04.claims.menu
 
-import io.github.bradenk04.claims.ClaimManager
 import io.github.bradenk04.claims.FloodgateHelper
 import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.domain.Claim
-import io.github.bradenk04.claims.menu.ClaimRoleDialog.getRoleDialog
 import io.papermc.paper.dialog.Dialog
 import io.papermc.paper.registry.data.dialog.ActionButton
 import io.papermc.paper.registry.data.dialog.DialogBase
 import io.papermc.paper.registry.data.dialog.action.DialogAction
-import io.papermc.paper.registry.data.dialog.body.DialogBody
 import io.papermc.paper.registry.data.dialog.input.DialogInput
 import io.papermc.paper.registry.data.dialog.input.TextDialogInput
 import io.papermc.paper.registry.data.dialog.type.DialogType
@@ -18,7 +15,6 @@ import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
-import org.geysermc.cumulus.component.util.ComponentType
 import org.geysermc.cumulus.form.CustomForm
 import org.geysermc.floodgate.api.player.FloodgatePlayer
 
@@ -26,7 +22,11 @@ import org.geysermc.floodgate.api.player.FloodgatePlayer
 object ClaimListMenu {
     fun open(player: Player) {
         if (FloodgateHelper.isBedrockPlayer(player)) {
-            val brPlayer = FloodgateHelper.getPlayer(player) ?: return
+            val brPlayer = FloodgateHelper.getPlayer(player)
+            if (brPlayer == null) {
+                println("Error: Player is bedrock but getPlayer returned null")
+                return
+            }
             openBedrockMenu(player, brPlayer)
         } else {
             openJavaDialog(player)
@@ -133,6 +133,7 @@ object ClaimListMenu {
             .optionalInput("Claim Name", claim.getFormattedClaimName(), true)
             .optionalInput("Claim Description", claim.description ?: "", true)
             .optionalDropdown("Edit other settings", listOf(
+                "None",
                 "Player Roles",
                 "Edit Role Permissions",
                 "Banned Players"
@@ -141,25 +142,25 @@ object ClaimListMenu {
         menu.validResultHandler { form, response ->
             val newName = response.next<String?>()
             val newDescription = response.next<String?>()
-            val newSettings = response.next<String?>()
+            val newSettings = response.next<Int?>()
 
             when (newSettings) {
-                "Player Roles" -> {
+                1 -> {
                     player.sendMessage("WIP")
                     return@validResultHandler
                 }
-                "Edit Role Permissions" -> {
+                2 -> {
                     player.sendMessage("WIP")
                     return@validResultHandler
                 }
-                "Banned Players" -> {
+                3 -> {
                     player.sendMessage("WIP")
                     return@validResultHandler
                 }
             }
 
-            if (newName != null) claim.name = newName
-            if (newDescription != null) claim.description = newDescription
+            if (newName != null && newName != "") claim.name = newName
+            if (newDescription != null && newName != "") claim.description = newDescription
 
             Database.claims.saveClaim(claim)
         }
