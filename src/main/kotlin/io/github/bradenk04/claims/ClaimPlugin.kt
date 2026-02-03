@@ -14,6 +14,7 @@ class ClaimPlugin : JavaPlugin() {
         lateinit var plugin: ClaimPlugin
         var isFolia = getIsFolia()
         lateinit var claimService: ClaimService
+        internal lateinit var metrics: Metrics
 
         private fun getIsFolia(): Boolean {
             try {
@@ -28,6 +29,7 @@ class ClaimPlugin : JavaPlugin() {
     override fun onEnable() {
         if (!dataFolder.exists()) dataFolder.mkdirs()
         plugin = this
+        metrics = Metrics(this, 14853)
         ConfigHandler.initialize()
         FloodgateHelper.setupFloodgate()
         Database.initialize()

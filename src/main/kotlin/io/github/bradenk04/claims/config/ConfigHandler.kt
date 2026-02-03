@@ -2,6 +2,7 @@ package io.github.bradenk04.claims.config
 
 import com.akuleshov7.ktoml.file.TomlFileReader
 import io.github.bradenk04.claims.ClaimPlugin
+import io.github.bradenk04.claims.Metrics
 import io.github.bradenk04.claims.config.language.LanguageConfig
 import java.io.File
 
@@ -21,6 +22,17 @@ object ConfigHandler {
         }
 
         config = TomlFileReader.decodeFromFile<PluginConfig>(PluginConfig.serializer(), pluginConfigFile.absolutePath)
+
+        ClaimPlugin.metrics.addCustomChart(
+            Metrics.SimplePie("language") {
+                config.language
+            }
+        )
+        ClaimPlugin.metrics.addCustomChart(
+            Metrics.SimplePie("database") {
+                config.database.type
+            }
+        )
 
         val languageStr = config.language
         val langFile = File(dataFolder, "lang/$languageStr.toml")
