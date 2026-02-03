@@ -2,8 +2,12 @@ package io.github.bradenk04.claims.command
 
 import io.github.bradenk04.claims.ClaimPlugin
 import io.github.bradenk04.claims.ClaimService
+import io.github.bradenk04.claims.LanguageService
+import io.github.bradenk04.claims.config.ConfigHandler
+import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.toChunkLocation
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
 import revxrsal.commands.annotation.Command
 import revxrsal.commands.bukkit.actor.BukkitCommandActor
 
@@ -18,26 +22,79 @@ class ClaimCommand {
         when (val claimResult = ClaimPlugin.claimService.claimChunk(player, player.location.toChunkLocation())) {
             is ClaimService.ClaimResult.Success -> {
                 if (claimResult.isNewClaim) {
-                    player.sendMessage(Component.text("Claimed new land"))
+                    val claim = Database.claims.getClaim(claimResult.claimId)
+                    if (claim == null) {
+                        player.sendMessage(
+                            MiniMessage.miniMessage().deserialize(
+                                ConfigHandler.language.claimLanguage.somethingWentWrongClaiming
+                            )
+                        )
+                        return
+                    }
+                    player.sendMessage(
+                        LanguageService.parseMessageWithClaim(
+                            ConfigHandler.language.claimLanguage.newLandClaimed,
+                            claim
+                        )
+                    )
                 } else {
-                    player.sendMessage(Component.text("Added chunk to existing claim"))
+                    val claim = Database.claims.getClaim(claimResult.claimId)
+                    if (claim == null) {
+                        player.sendMessage(
+                            MiniMessage.miniMessage().deserialize(
+                                ConfigHandler.language.claimLanguage.somethingWentWrongClaiming
+                            )
+                        )
+                        return
+                    }
+                    player.sendMessage(
+                        LanguageService.parseMessageWithClaim(
+                            ConfigHandler.language.claimLanguage.claimAddedLand,
+                            claim
+                        )
+                    )
                 }
                 return
             }
             is ClaimService.ClaimResult.AlreadyClaimed -> {
-                player.sendMessage(Component.text("You already own this claim!"))
+                player.sendMessage(
+                    LanguageService.parseMessageWithClaim(
+                        ConfigHandler.language.claimLanguage.alreadyOwned,
+                        claimResult.existingClaim
+                    )
+                )
                 return
             }
             is ClaimService.ClaimResult.NoPermission -> {
-                player.sendMessage(Component.text(claimResult.reason))
+                if (claimResult.becauseNoMoreClaims) {
+                    player.sendMessage(
+                        MiniMessage.miniMessage().deserialize(
+                            ConfigHandler.language.claimLanguage.maxClaimsReached,
+                        )
+                    )
+                } else {
+                    player.sendMessage(
+                        MiniMessage.miniMessage().deserialize(
+                            ConfigHandler.language.claimLanguage.noPermission,
+                        )
+                    )
+                }
                 return
             }
             is ClaimService.ClaimResult.InvalidLocation -> {
-                player.sendMessage(Component.text(claimResult.reason))
+                player.sendMessage(
+                    MiniMessage.miniMessage().deserialize(
+                        ConfigHandler.language.claimLanguage.invalidLocation,
+                    )
+                )
                 return
             }
             is ClaimService.ClaimResult.Error -> {
-                player.sendMessage(Component.text(claimResult.reason))
+                player.sendMessage(
+                    MiniMessage.miniMessage().deserialize(
+                        ConfigHandler.language.claimLanguage.somethingWentWrongClaiming,
+                    )
+                )
                 return
             }
         }

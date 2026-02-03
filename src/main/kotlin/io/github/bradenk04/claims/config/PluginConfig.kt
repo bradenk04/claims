@@ -8,7 +8,9 @@ data class PluginConfig(
     val database: DatabaseConfig = DatabaseConfig("sqlite"),
     val defaultGuestPermissions: Set<ClaimPermission> = setOf(
         ClaimPermission.ENTER_REGION
-    )
+    ),
+    val language: String = "en_US",
+    val claimSettings: ClaimSettings = ClaimSettings()
 )
 
 @Serializable
@@ -31,4 +33,12 @@ data class MysqlConfig(
 data class PoolConfig(
     val maximumPoolSize: Int = 10,
     val connectionTimeout: Long = 30000
+)
+
+@Serializable
+data class ClaimSettings(
+    var showEnterRegionMessage: Boolean = true,
+    var showEnterRegionActionBar: Boolean = true,
+    var showLeftRegionMessage: Boolean = true,
+    var showLeftRegionActionBar: Boolean = true
 )

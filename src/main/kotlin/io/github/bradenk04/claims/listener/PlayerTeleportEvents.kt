@@ -2,6 +2,8 @@ package io.github.bradenk04.claims.listener
 
 import io.github.bradenk04.claims.ClaimManager
 import io.github.bradenk04.claims.ClaimPlugin
+import io.github.bradenk04.claims.LanguageService
+import io.github.bradenk04.claims.config.ConfigHandler
 import io.github.bradenk04.claims.domain.ClaimPermission
 import io.github.bradenk04.claims.safeTeleport
 import org.bukkit.Bukkit
@@ -19,16 +21,41 @@ class PlayerTeleportEvents : Listener {
 
         if (!toClaim.hasPermission(e.player, ClaimPermission.ENTER_REGION)) { // TODO: Check if staff bypass
             cancelTeleport(e, e.player, "Message")
-            // TODO("Send message")
+            e.player.sendMessage(
+                LanguageService.parseMessageWithClaim(
+                    ConfigHandler.language.claimLanguage.permissions.cantEnterRegion,
+                    toClaim
+                )
+            )
             return
         }
         if (toClaim.isBanned(e.player)) { // TODO: Check if staff bypass
             cancelTeleport(e, e.player, "You are banned from this claim.")
-            // TODO("Send message")
+            e.player.sendMessage(
+                LanguageService.parseMessageWithClaim(
+                    ConfigHandler.language.claimLanguage.permissions.banned,
+                    toClaim
+                )
+            )
             return
         }
 
-        // TODO: Send entrance message
+        if (ConfigHandler.config.claimSettings.showEnterRegionMessage) {
+            e.player.sendMessage(
+                LanguageService.parseMessageWithClaim(
+                    ConfigHandler.language.claimLanguage.enteredRegionMessage,
+                    toClaim
+                )
+            )
+        }
+        if (ConfigHandler.language.claimLanguage.enteredRegionActionBar != null && ConfigHandler.config.claimSettings.showEnterRegionActionBar) {
+            e.player.sendActionBar(
+                LanguageService.parseMessageWithClaim(
+                    ConfigHandler.language.claimLanguage.enteredRegionActionBar!!,
+                    toClaim
+                )
+            )
+        }
     }
 
     fun cancelTeleport(e: PlayerTeleportEvent, player: Player, reason: String? = null) {

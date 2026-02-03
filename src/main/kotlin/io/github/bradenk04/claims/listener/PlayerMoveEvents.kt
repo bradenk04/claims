@@ -2,6 +2,8 @@ package io.github.bradenk04.claims.listener
 
 import io.github.bradenk04.claims.ClaimManager
 import io.github.bradenk04.claims.ClaimPlugin
+import io.github.bradenk04.claims.LanguageService
+import io.github.bradenk04.claims.config.ConfigHandler
 import io.github.bradenk04.claims.domain.ClaimPermission
 import io.github.bradenk04.claims.safeTeleport
 import net.kyori.adventure.text.Component
@@ -26,38 +28,58 @@ class PlayerMoveEvents : Listener {
         if (claim != null) {
             if (!claim.hasPermission(e.player, ClaimPermission.ENTER_REGION)) { // TODO: Check bypass
                 sendBack(e)
+                e.player.sendMessage(
+                    LanguageService.parseMessageWithClaim(
+                        ConfigHandler.language.claimLanguage.permissions.cantEnterRegion,
+                        claim
+                    )
+                )
                 // TODO: Send message
             }else if (claim.isBanned(e.player)) { // TODO: Check bypass
                 sendBack(e)
-                // TODO: Send message
-            } else if (oldClaim?.id != claim.id) {
-                val claimOwner = Bukkit.getOfflinePlayer(claim.owner)
-                e.player.sendActionBar(
-                    Component.text("You have entered ").color(NamedTextColor.WHITE)
-                        .append(
-                            Component.text(claim.getFormattedClaimName()).color(NamedTextColor.GREEN)
-                        )
-                )
-                e.player.sendMessage(Component.text("You have entered ")
-                    .append(
-                        Component.text(claim.getFormattedClaimName())
-                            .hoverEvent(
-                                HoverEvent.showText(
-                                    Component
-                                        .text("Claim: ${claim.getFormattedClaimName()}")
-                                        .appendNewline()
-                                        .append(Component.text("Owner: ${claimOwner.name}"))
-                                        .appendNewline()
-                                        .append(Component.text("Description: ${claim.description}"))
-                                )
-                            )
+                e.player.sendMessage(
+                    LanguageService.parseMessageWithClaim(
+                        ConfigHandler.language.claimLanguage.permissions.banned,
+                        claim
                     )
                 )
+            } else if (oldClaim?.id != claim.id) {
+                if (ConfigHandler.config.claimSettings.showEnterRegionMessage) {
+                    e.player.sendMessage(
+                        LanguageService.parseMessageWithClaim(
+                            ConfigHandler.language.claimLanguage.enteredRegionMessage,
+                            claim
+                        )
+                    )
+                }
+                if (ConfigHandler.language.claimLanguage.enteredRegionActionBar != null && ConfigHandler.config.claimSettings.showEnterRegionActionBar) {
+                    e.player.sendActionBar(
+                        LanguageService.parseMessageWithClaim(
+                            ConfigHandler.language.claimLanguage.enteredRegionActionBar!!,
+                            claim
+                        )
+                    )
+                }
             }
         }
 
         if (oldClaim != null) {
-            // TODO: Send exit message
+            if (ConfigHandler.config.claimSettings.showLeftRegionMessage) {
+                e.player.sendMessage(
+                    LanguageService.parseMessageWithClaim(
+                        ConfigHandler.language.claimLanguage.leftRegionMessage,
+                        oldClaim
+                    )
+                )
+            }
+            if (ConfigHandler.language.claimLanguage.leftRegionActionBar != null && ConfigHandler.config.claimSettings.showLeftRegionActionBar) {
+                e.player.sendActionBar(
+                    LanguageService.parseMessageWithClaim(
+                        ConfigHandler.language.claimLanguage.leftRegionActionBar!!,
+                        oldClaim
+                    )
+                )
+            }
         }
 
     }
