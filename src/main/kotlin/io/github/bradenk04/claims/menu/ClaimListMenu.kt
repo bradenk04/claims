@@ -26,48 +26,56 @@ import org.geysermc.floodgate.api.player.FloodgatePlayer
 object ClaimListMenu {
     fun open(player: Player) {
         if (FloodgateHelper.isBedrockPlayer(player)) {
-            val menu = CustomForm.builder()
-                .title("Your Claims")
-
-            val claims = Database.claims.getUsersClaims(player.uniqueId)
-            if (claims.count() < 1) {
-                player.sendMessage(Component.text("You have no claims! Do /claim to make a claim").color(NamedTextColor.RED))
-                return
-            }
-            menu.dropdown("Claim", claims.map { it.getFormattedClaimName() })
-
-
             val brPlayer = FloodgateHelper.getPlayer(player) ?: return
-
-            menu.validResultHandler { form, response ->
-                val claimIndex = response.asDropdown(0)
-                val claim = claims[claimIndex]
-                player.showDialog(getClaimDialog(player, claim))
-            }
-            brPlayer.sendForm(menu.build())
+            openBedrockMenu(player, brPlayer)
         } else {
-            val claims = Database.claims.getUsersClaims(player.uniqueId)
-            if (claims.count() < 1) {
-                player.sendMessage(Component.text("You have no claims! Do /claim to make a claim").color(NamedTextColor.RED))
-                return
-            }
-            val actions = claims.map {
-                ActionButton.builder(Component.text(it.getFormattedClaimName())).action(DialogAction.staticAction(
-                    ClickEvent.showDialog(getClaimDialog(player, it))
-                )).build()
-            }
-
-            val dialog = Dialog.create {
-                it.empty()
-                    .base(DialogBase.builder(Component.text("Your Claims")).build())
-                    .type(DialogType.multiAction(
-                        actions, null, 1
-                    ))
-            }
-
-            player.showDialog(dialog)
+            openJavaDialog(player)
         }
     }
+
+
+    private fun openBedrockMenu(player: Player, brPlayer: FloodgatePlayer) {
+        val menu = CustomForm.builder()
+            .title("Your Claims")
+
+        val claims = Database.claims.getUsersClaims(player.uniqueId)
+        if (claims.count() < 1) {
+            player.sendMessage(Component.text("You have no claims! Do /claim to make a claim").color(NamedTextColor.RED))
+            return
+        }
+        menu.dropdown("Claim", claims.map { it.getFormattedClaimName() })
+
+        menu.validResultHandler { form, response ->
+            val claimIndex = response.asDropdown(0)
+            val claim = claims[claimIndex]
+            showClaimForm(player, brPlayer, claim)
+        }
+        brPlayer.sendForm(menu.build())
+    }
+
+    private fun openJavaDialog(player: Player) {
+        val claims = Database.claims.getUsersClaims(player.uniqueId)
+        if (claims.count() < 1) {
+            player.sendMessage(Component.text("You have no claims! Do /claim to make a claim").color(NamedTextColor.RED))
+            return
+        }
+        val actions = claims.map {
+            ActionButton.builder(Component.text(it.getFormattedClaimName())).action(DialogAction.staticAction(
+                ClickEvent.showDialog(getClaimDialog(player, it))
+            )).build()
+        }
+
+        val dialog = Dialog.create {
+            it.empty()
+                .base(DialogBase.builder(Component.text("Your Claims")).build())
+                .type(DialogType.multiAction(
+                    actions, null, 1
+                ))
+        }
+
+        player.showDialog(dialog)
+    }
+
 
     private fun getClaimDialog(player: Player, claim: Claim) = Dialog.create {
         it.empty()
@@ -119,7 +127,44 @@ object ClaimListMenu {
             ), null, 3))
     }
 
-    private fun showClaimForm(jPlayer: Player, player: FloodgatePlayer, claim: Claim) {
-        TODO("")
+    private fun showClaimForm(player: Player, brPlayer: FloodgatePlayer, claim: Claim) {
+        val menu = CustomForm.builder()
+            .title("Claim Settings")
+            .optionalInput("Claim Name", claim.getFormattedClaimName(), true)
+            .optionalInput("Claim Description", claim.description ?: "", true)
+            .optionalDropdown("Edit other settings", listOf(
+                "Player Roles",
+                "Edit Role Permissions",
+                "Banned Players"
+            ), true)
+
+        menu.validResultHandler { form, response ->
+            val newName = response.next<String?>()
+            val newDescription = response.next<String?>()
+            val newSettings = response.next<String?>()
+
+            when (newSettings) {
+                "Player Roles" -> {
+                    player.sendMessage("WIP")
+                    return@validResultHandler
+                }
+                "Edit Role Permissions" -> {
+                    player.sendMessage("WIP")
+                    return@validResultHandler
+                }
+                "Banned Players" -> {
+                    player.sendMessage("WIP")
+                    return@validResultHandler
+                }
+            }
+
+            if (newName != null) claim.name = newName
+            if (newDescription != null) claim.description = newDescription
+
+            Database.claims.saveClaim(claim)
+        }
+
+        brPlayer.sendForm(menu.build())
+
     }
 }
