@@ -63,7 +63,7 @@ class PlayerMoveEvents : Listener {
             }
         }
 
-        if (oldClaim != null) {
+        if (oldClaim != null && oldClaim.id != claim?.id) {
             if (ConfigHandler.config.claimSettings.showLeftRegionMessage) {
                 e.player.sendMessage(
                     LanguageService.parseMessageWithClaim(
