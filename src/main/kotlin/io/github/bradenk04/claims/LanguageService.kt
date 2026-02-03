@@ -23,7 +23,7 @@ object LanguageService {
                 Placeholder.unparsed("claim_owner", claimOwner.playerProfile.name ?: "Unknown"),
                 Placeholder.unparsed("claim_id", claim.id.toString())
             )
-            lines = lines?.append(line) ?: line
+            lines = lines?.append(line)?.appendNewline() ?: line
         }
         var claimComponent = Component.text(claim.getFormattedClaimName())
         if (lines != null) claimComponent = claimComponent.hoverEvent(HoverEvent.showText(lines))
