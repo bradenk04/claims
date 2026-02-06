@@ -1,6 +1,7 @@
 package io.github.bradenk04.claims.domain
 
 import io.github.bradenk04.claims.config.ConfigHandler
+import io.github.bradenk04.claims.database.Database
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
@@ -48,6 +49,34 @@ class Claim internal constructor(
     fun hasPermission(player: UUID, permission: ClaimPermission): Boolean {
         val role = getPlayerRole(player)
         return getPermission(role, permission)
+    }
+    fun hasPermission(player: UUID, permission: ClaimPermissionGroups): Boolean {
+        val role = getPlayerRole(player)
+        var hasPerm = true
+        for (perm in permission.groupedPerms) {
+            if (!getPermission(role, perm)) hasPerm = false
+        }
+        return hasPerm
+    }
+
+    fun addPermission(role: String, permission: ClaimPermission) {
+        Database.claims.addPermission(id, role, permission.name)
+    }
+
+    fun addPermission(role: String, permission: ClaimPermissionGroups) {
+        for (perm in permission.groupedPerms) {
+            Database.claims.addPermission(id, role, perm.name)
+        }
+    }
+
+    fun removePermission(role: String, permission: ClaimPermission) {
+        Database.claims.removePermission(id, role, permission.name)
+    }
+
+    fun removePermission(role: String, permission: ClaimPermissionGroups) {
+        for (perm in permission.groupedPerms) {
+            Database.claims.removePermission(id, role, perm.name)
+        }
     }
 
     fun getRolePermissions(role: String): Set<ClaimPermission> = permissions[role] ?: setOf()
