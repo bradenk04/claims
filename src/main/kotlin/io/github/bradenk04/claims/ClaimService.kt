@@ -1,5 +1,6 @@
 package io.github.bradenk04.claims
 
+import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.database.repositories.ClaimRepository
 import io.github.bradenk04.claims.domain.ChunkLocation
 import io.github.bradenk04.claims.domain.Claim
@@ -40,6 +41,9 @@ class ClaimService(
 
         return if (parentClaim != null) {
             repository.addChunk(parentClaim.id, chunk)
+            Database.claims.getClaim(parentClaim.id)?.let {
+                BluemapHelper.registerClaim(it)
+            }
             ClaimResult.Success(
                 false,
                 parentClaim.id,
@@ -51,7 +55,7 @@ class ClaimService(
             if (playersClaims > 0 && !claimer.isOp) {
                 ClaimResult.NoPermission("Reached max claims", true)
             } else {
-                val newClaim = repository.createClaim(claimer.uniqueId, chunk)
+                val newClaim = ClaimManager.createClaim(claimer.uniqueId, chunk)
                 ClaimResult.Success(true, newClaim.id, chunk)
             }
         }

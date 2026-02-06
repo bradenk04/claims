@@ -20,6 +20,7 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.core.isNotNull
 import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
@@ -68,6 +69,12 @@ class SqlClaimRepository(
 
     override fun shutdown() {
         if (::dataSource.isInitialized) dataSource.close()
+    }
+
+    override fun getAllClaims(): List<Claim> = transaction(database) {
+        Claims.selectAll()
+            .where { Claims.ownerUUID.isNotNull() }
+            .map { row -> mapRowToClaim(row, row[Claims.id]) }
     }
 
     override fun createClaim(owner: UUID, chunk: ChunkLocation): Claim = transaction(database) {

@@ -11,6 +11,8 @@ interface ClaimRepository {
     fun initialize()
     fun shutdown()
 
+    fun getAllClaims(): List<Claim>
+
     fun createClaim(owner: UUID, chunk: ChunkLocation): Claim
     fun getClaim(id: Int): Claim?
     fun getClaim(loc: Location): Claim?

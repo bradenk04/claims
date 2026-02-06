@@ -14,6 +14,7 @@ version = "0.0.1"
 repositories {
     mavenCentral()
     maven("https://repo.opencollab.dev/main/")
+    maven("https://repo.bluecolored.de/releases")
 }
 
 dependencies {
@@ -32,6 +33,7 @@ dependencies {
 
     // Plugin Dependencies
     compileOnly(libs.floodgate.api)
+    compileOnly(libs.bluemap)
 }
 
 paperweight {

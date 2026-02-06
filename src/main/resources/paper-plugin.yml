@@ -10,3 +10,7 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
+    BlueMap:
+      load: BEFORE
+      required: false
+      join-classpath: true

@@ -38,6 +38,8 @@ class ClaimPlugin : JavaPlugin() {
         claimService = ClaimService(Database.claims)
         registerListeners()
         CommandHandler.setup()
+
+        BluemapHelper.initialize()
     }
 
     fun registerListeners() {
