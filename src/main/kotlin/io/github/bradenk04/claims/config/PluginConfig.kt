@@ -1,13 +1,13 @@
 package io.github.bradenk04.claims.config
 
-import io.github.bradenk04.claims.domain.ClaimPermission
+import io.github.bradenk04.claims.domain.ClaimPermissionGroups
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PluginConfig(
     val database: DatabaseConfig = DatabaseConfig("sqlite"),
-    val defaultGuestPermissions: Set<ClaimPermission> = setOf(
-        ClaimPermission.ENTER_REGION
+    val defaultGuestPermissions: Set<ClaimPermissionGroups> = setOf(
+        ClaimPermissionGroups.ENTER_CLAIM
     ),
     val language: String = "en_US",
     val claimSettings: ClaimSettings = ClaimSettings()

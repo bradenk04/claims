@@ -97,7 +97,16 @@ class Claim internal constructor(
         val name: String,
         val color: TextColor?,
         val permissions: Set<ClaimPermission>
-    )
+    ) {
+        fun hasPermission(permission: ClaimPermission): Boolean = permissions.contains(permission)
+        fun hasPermission(permission: ClaimPermissionGroups): Boolean {
+            var hasPerm = true
+            for (perm in permission.groupedPerms) {
+                if (!hasPermission(perm)) hasPerm = false
+            }
+            return hasPerm
+        }
+    }
 }
 
 data class ChunkLocation(val world: UUID, val x: Int, val z: Int)

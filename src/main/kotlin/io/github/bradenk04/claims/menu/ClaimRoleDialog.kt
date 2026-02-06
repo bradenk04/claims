@@ -3,7 +3,7 @@ package io.github.bradenk04.claims.menu
 import io.github.bradenk04.claims.config.ConfigHandler
 import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.domain.Claim
-import io.github.bradenk04.claims.domain.ClaimPermission
+import io.github.bradenk04.claims.domain.ClaimPermissionGroups
 import io.papermc.paper.dialog.Dialog
 import io.papermc.paper.registry.data.dialog.ActionButton
 import io.papermc.paper.registry.data.dialog.DialogBase
@@ -14,9 +14,9 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
-import net.minecraft.network.chat.TextColor
 import org.bukkit.entity.Player
 
+@Suppress("UnstableApiUsage")
 object ClaimRoleDialog {
     fun getDialog(player: Player, claim: Claim): Dialog {
         val roles = claim.roles.toMutableList()
@@ -46,11 +46,11 @@ object ClaimRoleDialog {
     }
 
     fun getRoleDialog(player: Player, claim: Claim, role: Claim.ClaimRole): Dialog {
-        val permissionOptions = ClaimPermission.entries.map {
+        val permissionOptions = ClaimPermissionGroups.entries.map {
             val permId = it.name.lowercase()
             DialogInput
                 .bool("perm_$permId", Component.text(permId.replace("_", " ").capitalize()))
-                .initial(role.permissions.contains(it))
+                .initial(role.hasPermission(it))
                 .onTrue("true")
                 .onFalse("false")
                 .build()
@@ -64,13 +64,13 @@ object ClaimRoleDialog {
                         Database.claims.setRoleColor(claim.id, role.name, newColor.asHexString())
                     }
 
-                    ClaimPermission.entries.forEachIndexed { index, perm ->
+                ClaimPermissionGroups.entries.forEachIndexed { index, perm ->
                         val setValue = view.getBoolean("perm_${perm.name.lowercase()}") ?: false
-                        if (setValue != role.permissions.contains(perm)) {
+                        if (setValue != role.hasPermission(perm)) {
                             if (setValue) {
-                                Database.claims.addPermission(claim.id, role.name, perm.name)
+                                claim.addPermission(role.name, perm)
                             } else {
-                                Database.claims.removePermission(claim.id, role.name, perm.name)
+                                claim.removePermission(role.name, perm)
                             }
                         }
                     }
@@ -119,7 +119,7 @@ object ClaimRoleDialog {
     }
 
     fun createRoleDialog(player: Player, claim: Claim): Dialog {
-        val permissionOptions = ClaimPermission.entries.map {
+        val permissionOptions = ClaimPermissionGroups.entries.map {
             val permId = it.name.lowercase()
             DialogInput
                 .bool("perm_$permId", Component.text(permId.replace("_", " ").capitalize()))
@@ -157,10 +157,10 @@ object ClaimRoleDialog {
                                 val color = view.getText("role_color")?.let { net.kyori.adventure.text.format.TextColor.fromHexString(it) }
 
                                 Database.claims.setRoleColor(claim.id, name, color?.asHexString() ?: "#FFFFFF")
-                                ClaimPermission.entries.forEachIndexed { _, perm ->
+                                ClaimPermissionGroups.entries.forEachIndexed { _, perm ->
                                     val permValue = view.getBoolean("perm_${perm.name.lowercase()}") ?: return@forEachIndexed
                                     if (permValue) {
-                                        Database.claims.addPermission(claim.id, name, perm.name)
+                                        claim.addPermission(name, perm)
                                     }
                                 }
                             },
