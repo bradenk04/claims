@@ -12,7 +12,7 @@ class LiquidEvents : Listener {
         if (!e.block.isLiquid) return
         val toClaim = ClaimManager.getClaim(e.toBlock.chunk) ?: return
         val fromClaim = ClaimManager.getClaim(e.block.chunk)
-        if (fromClaim != null && fromClaim == toClaim) return
+        if (fromClaim != null && fromClaim.id == toClaim.id) return
         e.isCancelled = true
     }
 
