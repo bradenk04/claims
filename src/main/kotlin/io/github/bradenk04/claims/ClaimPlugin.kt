@@ -3,6 +3,7 @@ package io.github.bradenk04.claims
 import io.github.bradenk04.claims.command.CommandHandler
 import io.github.bradenk04.claims.config.ConfigHandler
 import io.github.bradenk04.claims.database.Database
+import io.github.bradenk04.claims.listener.LiquidEvents
 import io.github.bradenk04.claims.listener.PlayerBlockEvents
 import io.github.bradenk04.claims.listener.PlayerItemEvents
 import io.github.bradenk04.claims.listener.PlayerMoveEvents
@@ -44,5 +45,6 @@ class ClaimPlugin : JavaPlugin() {
         server.pluginManager.registerEvents(PlayerTeleportEvents(), this)
         server.pluginManager.registerEvents(PlayerMoveEvents(), this)
         server.pluginManager.registerEvents(PlayerBlockEvents(), this)
+        server.pluginManager.registerEvents(LiquidEvents(), this)
     }
 }

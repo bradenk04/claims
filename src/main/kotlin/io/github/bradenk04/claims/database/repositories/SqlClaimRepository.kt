@@ -97,10 +97,12 @@ class SqlClaimRepository(
         }
 
         ConfigHandler.config.defaultGuestPermissions.forEach { perm ->
-            ClaimPermissions.insertIgnore {
-                it[ClaimPermissions.claimId] = newId
-                it[ClaimPermissions.role] = "guest"
-                it[ClaimPermissions.permission] = perm.toString()
+            perm.groupedPerms.forEach { subPerm ->
+                ClaimPermissions.insertIgnore {
+                    it[ClaimPermissions.claimId] = newId
+                    it[ClaimPermissions.role] = "guest"
+                    it[ClaimPermissions.permission] = subPerm.toString()
+                }
             }
         }
 
