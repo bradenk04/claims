@@ -101,7 +101,6 @@ object ClaimListMenu {
                     .builder(Component.text("Edit Role Permissions"))
                     .action(DialogAction.staticAction(ClickEvent.showDialog(ClaimRoleDialog.getDialog(player, claim))))
                     .build(),
-                ActionButton.builder(Component.text("Banned Players")).build(),
                 ActionButton
                     .builder(Component.text("Save Claim").color(NamedTextColor.GREEN))
                     .action(DialogAction.customClick(
@@ -124,7 +123,7 @@ object ClaimListMenu {
                         )
                     )
                     .build()
-            ), null, 3))
+            ), null, 2))
     }
 
     private fun showClaimForm(player: Player, brPlayer: FloodgatePlayer, claim: Claim) {

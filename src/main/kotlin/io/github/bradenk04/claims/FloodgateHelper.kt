@@ -26,6 +26,7 @@ object FloodgateHelper {
     }
 
     fun getPlayer(player: OfflinePlayer): FloodgatePlayer? {
+        if (!isFloodgateServer) return null
         return floodgateApi.getPlayer(player.uniqueId)
     }
 }
