@@ -212,13 +212,14 @@ class SqlClaimRepository(
         Unit
     }
 
-    override fun removeChunk(claimId: Int, chunk: ChunkLocation) {
+    override fun removeChunk(claimId: Int, chunk: ChunkLocation) = transaction(database) {
         ClaimChunks.deleteWhere {
             (ClaimChunks.worldUuid eq chunk.world.toKotlinUuid()) and (x eq chunk.x) and (z eq chunk.z)
         }
+        Unit
     }
 
-    override fun setRole(claimId: Int, user: UUID, role: String) {
+    override fun setRole(claimId: Int, user: UUID, role: String) = transaction(database) {
         ClaimRoles.deleteWhere {
             (ClaimRoles.claimId eq claimId) and (ClaimRoles.player eq user.toKotlinUuid())
         }
@@ -228,6 +229,7 @@ class SqlClaimRepository(
             it[ClaimRoles.player] = user.toKotlinUuid()
             it[ClaimRoles.role] = role
         }
+        Unit
     }
 
     override fun deleteRole(claimId: Int, role: String) = transaction(database) {
