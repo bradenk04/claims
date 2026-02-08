@@ -1,3 +1,4 @@
+import io.papermc.paperweight.tasks.RemapJar
 import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
@@ -9,7 +10,7 @@ plugins {
 }
 
 group = "io.github.bradenk04"
-version = "0.0.1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -85,5 +86,9 @@ tasks {
 
     assemble {
         dependsOn(reobfJar)
+    }
+
+    reobfJar {
+        outputJar.set(layout.buildDirectory.file("libs/${project.name}-${project.version}-paper.jar"))
     }
 }

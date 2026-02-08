@@ -30,7 +30,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          JAR_FILE=$(ls build/libs/*-reobf.jar | head -n 1)
+          JAR_FILE=$(ls build/libs/*-paper.jar | head -n 1)
           
           curl -v -F "payload_json={\"content\": \"✅ **Build Successful!**\nHere is the latest plugin build:\"}" \
                -F "file=@$JAR_FILE" \
