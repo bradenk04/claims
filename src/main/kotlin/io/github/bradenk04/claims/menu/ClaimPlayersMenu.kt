@@ -13,6 +13,7 @@ import io.papermc.paper.registry.data.dialog.type.DialogType
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -23,8 +24,10 @@ object ClaimPlayersMenu {
         val actions = claim.playerRoles.map {
             val target = Bukkit.getOfflinePlayer(it.key)
             val targetName = target.name ?: (FloodgateHelper.getPlayer(target)?.username ?: "N/A")
+            val role = claim.roles.find { role -> role.name == it.value }
             ActionButton.builder(
-                Component.text("${targetName}: ${it.value}")
+                Component.text("${targetName}: ")
+                    .append(Component.text(it.value, role?.color))
             )
                 .action(DialogAction.staticAction(ClickEvent.showDialog(
                     getSetRoleDialog(player, claim, it.key, it.value)
