@@ -9,6 +9,12 @@ data class PluginConfig(
     val defaultGuestPermissions: Set<ClaimPermissionGroups> = setOf(
         ClaimPermissionGroups.ENTER_CLAIM
     ),
+    val defaultTrustedPermissions: Set<ClaimPermissionGroups> = setOf(
+        ClaimPermissionGroups.ENTER_CLAIM,
+        ClaimPermissionGroups.MODIFY_BLOCKS,
+        ClaimPermissionGroups.DROPPED_ITEMS,
+        ClaimPermissionGroups.BLOCK_INTERACTION,
+    ),
     val language: String = "en_US",
     val claimSettings: ClaimSettings = ClaimSettings()
 )

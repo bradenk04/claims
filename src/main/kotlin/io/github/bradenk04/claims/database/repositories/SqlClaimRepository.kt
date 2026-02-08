@@ -92,14 +92,14 @@ class SqlClaimRepository(
         ClaimPermission.entries.forEach { perm ->
             ClaimPermissions.insertIgnore {
                 it[ClaimPermissions.claimId] = newId
-                it[ClaimPermissions.role] = "owner"
+                it[ClaimPermissions.role] = "Owner"
                 it[ClaimPermissions.permission] = perm.toString()
             }
         }
 
         ClaimRoleMetadata.insertIgnore {
             it[ClaimRoleMetadata.claimId] = newId
-            it[ClaimRoleMetadata.role] = "owner"
+            it[ClaimRoleMetadata.role] = "Owner"
             it[ClaimRoleMetadata.color] = "#FF0000"
         }
 
@@ -107,7 +107,7 @@ class SqlClaimRepository(
             perm.groupedPerms.forEach { subPerm ->
                 ClaimPermissions.insertIgnore {
                     it[ClaimPermissions.claimId] = newId
-                    it[ClaimPermissions.role] = "guest"
+                    it[ClaimPermissions.role] = "Guest"
                     it[ClaimPermissions.permission] = subPerm.toString()
                 }
             }
@@ -115,14 +115,30 @@ class SqlClaimRepository(
 
         ClaimRoleMetadata.insertIgnore {
             it[ClaimRoleMetadata.claimId] = newId
-            it[ClaimRoleMetadata.role] = "guest"
+            it[ClaimRoleMetadata.role] = "Guest"
             it[ClaimRoleMetadata.color] = "#FFFFFF"
         }
 
         ClaimRoles.insertIgnore {
             it[ClaimRoles.claimId] = newId
             it[ClaimRoles.player] = owner.toKotlinUuid()
-            it[ClaimRoles.role] = "owner"
+            it[ClaimRoles.role] = "Owner"
+        }
+
+        ConfigHandler.config.defaultTrustedPermissions.forEach { perm ->
+            perm.groupedPerms.forEach { subPerm ->
+                ClaimPermissions.insertIgnore {
+                    it[ClaimPermissions.claimId] = newId
+                    it[ClaimPermissions.role] = "Trusted"
+                    it[ClaimPermissions.permission] = subPerm.toString()
+                }
+            }
+        }
+
+        ClaimRoleMetadata.insertIgnore {
+            it[ClaimRoleMetadata.claimId] = newId
+            it[ClaimRoleMetadata.role] = "Trusted"
+            it[ClaimRoleMetadata.color] = "#FFFFFF"
         }
 
         Claim(newId, owner, null, null, mutableSetOf(chunk))
