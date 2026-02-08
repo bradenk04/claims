@@ -27,7 +27,7 @@ object ClaimRoles : Table("claim_roles") {
     val claimId = reference("claim_id", Claims.id, onDelete = ReferenceOption.CASCADE)
     val role = varchar("role", 32)
     val player = uuid("player")
-    override val primaryKey = PrimaryKey(claimId, role)
+    override val primaryKey = PrimaryKey(claimId, player)
 }
 
 object ClaimPermissions : Table("claim_permissions") {
