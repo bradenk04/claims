@@ -64,7 +64,7 @@ object ClaimRoleDialog {
                         Database.claims.setRoleColor(claim.id, role.name, newColor.asHexString())
                     }
 
-                ClaimPermissionGroups.entries.forEachIndexed { index, perm ->
+                    ClaimPermissionGroups.entries.forEachIndexed { index, perm ->
                         val setValue = view.getBoolean("perm_${perm.name.lowercase()}") ?: false
                         if (setValue != role.hasPermission(perm)) {
                             if (setValue) {
@@ -74,6 +74,7 @@ object ClaimRoleDialog {
                             }
                         }
                     }
+                    getDialog(player, claim)
                 },
                 ClickCallback.Options.builder()
                     .uses(1)
@@ -85,6 +86,7 @@ object ClaimRoleDialog {
         val deleteBtn = ActionButton.builder(Component.text("Delete Role"))
             .action(DialogAction.customClick({ view, _ ->
                 Database.claims.deleteRole(claim.id, role.name)
+                getDialog(player, claim)
             },
                 ClickCallback.Options.builder()
                     .uses(1)
@@ -163,6 +165,7 @@ object ClaimRoleDialog {
                                         claim.addPermission(name, perm)
                                     }
                                 }
+                                getDialog(player, claim)
                             },
                             ClickCallback.Options.builder()
                                 .uses(1)

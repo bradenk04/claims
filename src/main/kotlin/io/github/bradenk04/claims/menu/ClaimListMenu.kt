@@ -116,6 +116,7 @@ object ClaimListMenu {
                             }
 
                             Database.claims.saveClaim(claim)
+                            open(player)
                         },
                         ClickCallback.Options.builder()
                             .uses(1)
