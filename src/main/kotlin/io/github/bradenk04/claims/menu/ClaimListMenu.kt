@@ -77,7 +77,7 @@ object ClaimListMenu {
     }
 
 
-    private fun getClaimDialog(player: Player, claim: Claim) = Dialog.create {
+    fun getClaimDialog(player: Player, claim: Claim) = Dialog.create {
         it.empty()
             .base(DialogBase
                 .builder(Component.text(claim.getFormattedClaimName()))
@@ -96,6 +96,7 @@ object ClaimListMenu {
                 .build())
             .type(DialogType.multiAction(listOf(
                 ActionButton.builder(Component.text("Players Roles"))
+                    .action(DialogAction.staticAction(ClickEvent.showDialog(ClaimPlayersMenu.getDialog(player, claim))))
                     .build(),
                 ActionButton
                     .builder(Component.text("Edit Role Permissions"))

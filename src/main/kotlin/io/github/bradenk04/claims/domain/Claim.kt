@@ -92,6 +92,11 @@ class Claim internal constructor(
         return playerRoles[player] ?: if (owner == player) "owner" else "guest"
     }
 
+    fun setPlayerRole(player: UUID, role: String) {
+        playerRoles[player] = role
+        Database.claims.setRole(id, player, role)
+    }
+
     class ClaimRole(
         val claim: Int,
         val name: String,
