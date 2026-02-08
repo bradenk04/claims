@@ -74,7 +74,7 @@ object ClaimRoleDialog {
                             }
                         }
                     }
-                    getDialog(player, claim)
+                    player.showDialog(getDialog(player, claim))
                 },
                 ClickCallback.Options.builder()
                     .uses(1)
@@ -86,7 +86,7 @@ object ClaimRoleDialog {
         val deleteBtn = ActionButton.builder(Component.text("Delete Role"))
             .action(DialogAction.customClick({ view, _ ->
                 Database.claims.deleteRole(claim.id, role.name)
-                getDialog(player, claim)
+                player.showDialog(getDialog(player, claim))
             },
                 ClickCallback.Options.builder()
                     .uses(1)
@@ -165,7 +165,7 @@ object ClaimRoleDialog {
                                         claim.addPermission(name, perm)
                                     }
                                 }
-                                getDialog(player, claim)
+                                player.showDialog(getDialog(player, claim))
                             },
                             ClickCallback.Options.builder()
                                 .uses(1)
