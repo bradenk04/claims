@@ -13,6 +13,25 @@
 </div>
 </div>
 
+Allow your players to claim chunks, modify claim permissions, ban players, and more! Claims allows players to easily and efficiently protect their builds and land from untrusted players. It also allows players to add their friends to the claim with varying permissions so that they can collaberate with friends!
+
+---
+
+## Features
+✅ Land claiming \
+✅ Easily add to claims \
+✅ Player claim access manager \
+✅ GUI claim management \
+📜 Transfer claims to other players \
+📜 Teleport to your claim \
+📜 Sell claims to other players \
+📜 Easily view claim borders with particles \
+📜 Claim chat \
+✅ Ban/kick players from claims \
+✅ Customizable guest permissions \
+✅ Bluemap Support \
+*✅ = Implemented, 📜 = Planned, ❌ = Not planned yet*
+
 ---
 
 ## Compatibility
@@ -28,18 +47,3 @@
 | Forge      |     ❌     | N/A               |
 | Spigot     |     ❌     | N/A               |
 *✅ = Supported, ⚠️ Might work, not tested, 📜 Support Planned/Possible, ❌ = Not Supported*
-
-## Features
-✅ Land claiming \
-✅ Easily add to claims \
-✅ Player claim access manager \
-✅ GUI claim management \
-📜 Transfer claims to other players \
-📜 Teleport to your claim \
-📜 Sell claims to other players \
-📜 Easily view claim borders with particles \
-📜 Claim chat \
-✅ Ban/kick players from claims \
-✅ Customizable guest permissions \
-📜 Bluemap Support \
-*✅ = Implemented, 📜 = Planned, ❌ = Not planned yet*
