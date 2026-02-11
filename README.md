@@ -13,6 +13,8 @@
 </div>
 </div>
 
+---
+
 Allow your players to claim chunks, modify claim permissions, ban players, and more! Claims allows players to easily and efficiently protect their builds and land from untrusted players. It also allows players to add their friends to the claim with varying permissions so that they can collaberate with friends!
 
 ---
