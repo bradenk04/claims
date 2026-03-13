@@ -38,6 +38,7 @@ bin/
 
 ### VS Code ###
 .vscode/
+run/
 
 ### Mac OS ###
 .DS_Store
