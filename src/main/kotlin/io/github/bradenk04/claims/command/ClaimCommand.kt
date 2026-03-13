@@ -4,6 +4,7 @@ import io.github.bradenk04.claims.ClaimPlugin
 import io.github.bradenk04.claims.ClaimService
 import io.github.bradenk04.claims.LanguageService
 import io.github.bradenk04.claims.config.ConfigHandler
+import io.github.bradenk04.claims.config.language.LanguageConfig
 import io.github.bradenk04.claims.database.Database
 import io.github.bradenk04.claims.toChunkLocation
 import net.kyori.adventure.text.Component
@@ -21,6 +22,14 @@ class ClaimCommand {
             return
         }
         val player = author.requirePlayer()
+        if (!player.hasPermission("claims.claim") && !player.hasPermission("claims.bypass")) {
+            player.sendMessage(
+                MiniMessage.miniMessage().deserialize(
+                    ConfigHandler.language.claimLanguage.noPermission
+                )
+            )
+            return
+        }
         when (val claimResult = ClaimPlugin.claimService.claimChunk(player, player.location.toChunkLocation())) {
             is ClaimService.ClaimResult.Success -> {
                 if (claimResult.isNewClaim) {

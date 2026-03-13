@@ -7,11 +7,12 @@ import io.github.bradenk04.claims.domain.Claim
 import io.github.bradenk04.claims.domain.ClaimPermission
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
 
 class ClaimService(
     val repository: ClaimRepository
 ) {
-    fun claimChunk(claimer: OfflinePlayer, chunk: ChunkLocation): ClaimResult {
+    fun claimChunk(claimer: Player, chunk: ChunkLocation): ClaimResult {
         val existing = repository.getClaim(chunk)
         if (existing != null) {
             return ClaimResult.AlreadyClaimed(existing)
@@ -51,8 +52,7 @@ class ClaimService(
             )
         } else {
             val playersClaims = repository.getUsersClaimCount(claimer.uniqueId)
-            // TODO: Implement permission check.
-            if (playersClaims > 0 && !claimer.isOp) {
+            if (playersClaims >= claimer.getMaxClaims() && !claimer.hasPermission("claims.bypass")) {
                 ClaimResult.NoPermission("Reached max claims", true)
             } else {
                 val newClaim = ClaimManager.createClaim(claimer.uniqueId, chunk)
