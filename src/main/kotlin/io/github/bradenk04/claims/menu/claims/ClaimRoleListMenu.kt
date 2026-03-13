@@ -1,8 +1,6 @@
 package io.github.bradenk04.claims.menu.claims
 
 import io.github.bradenk04.claims.domain.Claim
-import io.github.bradenk04.claims.menu.ClaimRoleDialog.createRoleDialog
-import io.github.bradenk04.claims.menu.ClaimRoleDialog.getRoleDialog
 import io.papermc.paper.dialog.Dialog
 import io.papermc.paper.registry.data.dialog.ActionButton
 import io.papermc.paper.registry.data.dialog.DialogBase
@@ -32,12 +30,12 @@ object ClaimRoleListMenu {
                         ActionButton
                             .builder(Component.text(role.name.capitalize()).color(role.color))
                             .action(DialogAction.staticAction(
-                                ClickEvent.showDialog(getRoleDialog(player, claim, role))
+                                ClickEvent.showDialog(ClaimEditRoleMenu.getDialog(player, claim, role))
                             ))
                             .build()
                     }.toTypedArray()), ActionButton
                         .builder(Component.text("Create new role").color(NamedTextColor.GREEN))
-                        .action(DialogAction.staticAction(ClickEvent.showDialog(createRoleDialog(player, claim)))) // TODO: implement
+                        .action(DialogAction.staticAction(ClickEvent.showDialog(ClaimCreateRoleMenu.getDialog(player, claim))))
                         .build()
                     ), null, 1)
                 )

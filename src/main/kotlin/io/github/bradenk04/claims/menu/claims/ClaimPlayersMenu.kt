@@ -2,7 +2,6 @@ package io.github.bradenk04.claims.menu.claims
 
 import io.github.bradenk04.claims.FloodgateHelper
 import io.github.bradenk04.claims.domain.Claim
-import io.github.bradenk04.claims.menu.ClaimRoleDialog
 import io.papermc.paper.dialog.Dialog
 import io.papermc.paper.registry.data.dialog.ActionButton
 import io.papermc.paper.registry.data.dialog.DialogBase
