@@ -1,24 +1,32 @@
 package io.github.bradenk04.claims.config
 
 import io.github.bradenk04.claims.domain.ClaimPermissionGroups
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PluginConfig(
     val database: DatabaseConfig = DatabaseConfig("sqlite"),
-    val defaultGuestPermissions: Set<ClaimPermissionGroups> = setOf(
-        ClaimPermissionGroups.ENTER_CLAIM
+    @SerialName("defaultGuestPermissions")
+    private val defaultGuestPermissionsConfig: Set<String> = setOf(
+        "ENTER_CLAIM"
     ),
-    val defaultTrustedPermissions: Set<ClaimPermissionGroups> = setOf(
-        ClaimPermissionGroups.ENTER_CLAIM,
-        ClaimPermissionGroups.MODIFY_BLOCKS,
-        ClaimPermissionGroups.DROPPED_ITEMS,
-        ClaimPermissionGroups.BLOCK_INTERACTION,
+    @SerialName("defaultTrustedPermissions")
+    private val defaultTrustedPermissionsConfig: Set<String> = setOf(
+        "ENTER_CLAIM",
+        "MODIFY_BLOCKS",
+        "DROPPED_ITEMS",
+        "BLOCK_INTERACTION"
     ),
     val language: String = "en_US",
     val claimSettings: ClaimSettings = ClaimSettings()
-)
+) {
 
+    val defaultGuestPermissions: Set<ClaimPermissionGroups>
+        get() = defaultGuestPermissionsConfig.map { ClaimPermissionGroups.valueOf(it) }.toSet()
+    val defaultTrustedPermissions: Set<ClaimPermissionGroups>
+        get() = defaultTrustedPermissionsConfig.map { ClaimPermissionGroups.valueOf(it) }.toSet()
+}
 @Serializable
 data class DatabaseConfig(
     val type: String,

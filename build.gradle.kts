@@ -1,4 +1,4 @@
-import io.papermc.paperweight.tasks.RemapJar
+import xyz.jpenilla.runpaper.task.RunServer
 import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.paperweight.userdev)
+    alias(libs.plugins.run.paper)
 }
 
 group = "io.github.bradenk04"
@@ -59,6 +60,13 @@ tasks {
         compilerOptions {
             javaParameters = true
         }
+    }
+
+    runServer {
+        minecraftVersion("1.21.11")
+        dependsOn(jar)
+        jvmArgs("-XX:+UseG1GC", "-Xmx2G")
+        systemProperty("plugin.debug", "true")
     }
 
     processResources {
