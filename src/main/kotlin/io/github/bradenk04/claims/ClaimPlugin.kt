@@ -8,6 +8,7 @@ import io.github.bradenk04.claims.listener.PlayerBlockEvents
 import io.github.bradenk04.claims.listener.PlayerItemEvents
 import io.github.bradenk04.claims.listener.PlayerMoveEvents
 import io.github.bradenk04.claims.listener.PlayerTeleportEvents
+import io.github.bradenk04.claims.permission.PermissionHelper
 import org.bukkit.plugin.java.JavaPlugin
 
 class ClaimPlugin : JavaPlugin() {
@@ -34,6 +35,7 @@ class ClaimPlugin : JavaPlugin() {
         ConfigHandler.initialize()
         FloodgateHelper.setupFloodgate()
         Database.initialize()
+        PermissionHelper.initialize()
 
         claimService = ClaimService(Database.claims)
         registerListeners()

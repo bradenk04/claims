@@ -1,5 +1,6 @@
 package io.github.bradenk04.claims
 
+import io.github.bradenk04.claims.config.ConfigHandler
 import io.github.bradenk04.claims.domain.ChunkLocation
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -20,3 +21,17 @@ fun Player.safeTeleport(loc: Location) {
 }
 
 fun Location.toChunkLocation() = ChunkLocation(this.world.uid, this.chunk.x, this.chunk.z)
+
+fun Player.getMaxClaims(): Int {
+    val defaultMaxClaims = ConfigHandler.config.claimSettings.defaultMaxClaims
+
+    val amountPerms = this.effectivePermissions.filter {
+        it.permission.startsWith("claims.amount.") && it.value
+    }
+
+    if (amountPerms.isEmpty()) return defaultMaxClaims
+
+    return amountPerms.mapNotNull {
+        it.permission.split(".").last().toIntOrNull()
+    }.maxOrNull() ?: defaultMaxClaims
+}

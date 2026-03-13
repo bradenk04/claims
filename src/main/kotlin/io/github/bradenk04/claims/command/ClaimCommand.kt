@@ -10,9 +10,11 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import revxrsal.commands.annotation.Command
 import revxrsal.commands.bukkit.actor.BukkitCommandActor
+import revxrsal.commands.bukkit.annotation.CommandPermission
 
 class ClaimCommand {
     @Command("claim")
+    @CommandPermission("claims.claim")
     fun claimLand(author: BukkitCommandActor) {
         if (!author.isPlayer) {
             author.sender().sendMessage(Component.text("Only players can claim land!"))

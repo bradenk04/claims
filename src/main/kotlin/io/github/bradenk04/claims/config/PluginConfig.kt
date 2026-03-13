@@ -51,6 +51,7 @@ data class PoolConfig(
 
 @Serializable
 data class ClaimSettings(
+    var defaultMaxClaims: Int = 1,
     var showEnterRegionMessage: Boolean = true,
     var showEnterRegionActionBar: Boolean = true,
     var showLeftRegionMessage: Boolean = true,
