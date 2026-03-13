@@ -1,28 +1,37 @@
 package io.github.bradenk04.claims.domain
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class ClaimPermissionGroups {
+    @SerialName("MODIFY_CLAIM")
     MODIFY_CLAIM {
         override val groupedPerms: Set<ClaimPermission> = setOf(
             ClaimPermission.ADD_TO_CLAIM
         )
     },
+    @SerialName("DROPPED_ITEMS")
     DROPPED_ITEMS {
         override val groupedPerms: Set<ClaimPermission> = setOf(
             ClaimPermission.DROP_ITEMS,
             ClaimPermission.PICKUP_ITEMS
         )
     },
+    @SerialName("ENTER_CLAIM")
     ENTER_CLAIM {
         override val groupedPerms: Set<ClaimPermission> = setOf(
             ClaimPermission.ENTER_REGION
         )
     },
+    @SerialName("MODIFY_BLOCKS")
     MODIFY_BLOCKS {
         override val groupedPerms: Set<ClaimPermission> = setOf(
             ClaimPermission.BREAK_BLOCKS,
             ClaimPermission.PLACE_BLOCKS
         )
     },
+    @SerialName("BLOCK_INTERACTION")
     BLOCK_INTERACTION {
         override val groupedPerms: Set<ClaimPermission> = setOf(
             ClaimPermission.CLICK_BUTTONS,

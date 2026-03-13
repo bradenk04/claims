@@ -11,7 +11,7 @@ import java.util.UUID
 object ClaimManager {
     fun createClaim(owner: UUID, chunk: ChunkLocation): Claim {
         val newClaim = Database.claims.createClaim(owner, chunk)
-        registerClaim(newClaim)
+        if (BluemapHelper.isBluemapEnabled) BluemapHelper.registerClaim(newClaim)
         return newClaim
     }
 

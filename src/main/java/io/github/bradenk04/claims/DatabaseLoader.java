@@ -22,7 +22,7 @@ class DatabaseLoader {
             List<String> lines = Files.readAllLines(mainConfig);
             for (String line : lines) {
                 String trimmed = line.trim();
-                if (trimmed.startsWith("database")) {
+                if (trimmed.startsWith("type")) {
                     int firstQuote = trimmed.indexOf('"');
                     int lastQuote = trimmed.lastIndexOf('"');
                     if (firstQuote != -1 && lastQuote > firstQuote) {

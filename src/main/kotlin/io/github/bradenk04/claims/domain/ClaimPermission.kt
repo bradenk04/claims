@@ -1,5 +1,8 @@
 package io.github.bradenk04.claims.domain
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class ClaimPermission {
     PICKUP_ITEMS,
     DROP_ITEMS,

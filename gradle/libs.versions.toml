@@ -7,11 +7,13 @@ lamp = "4.0.0-rc.14"
 exposed = "1.0.0"
 hikaricp = "7.0.2"
 bluemap = "2.7.7"
+run-paper = "3.0.2"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 paperweight-userdev = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
 
 [libraries]
 ktoml-core = { module = "com.akuleshov7:ktoml-core", version.ref = "ktoml" }
