@@ -9,7 +9,7 @@
         <a href="https://bstats.org/plugin/bukkit/Claims/29288" target="_blank" rel="noopener noreferrer"><img alt="bStats Servers" src="https://img.shields.io/bstats/servers/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288"></a>
         <a href="https://bstats.org/plugin/bukkit/Claims/29288" target="_blank" rel="noopener noreferrer"><img alt="bStats Players" src="https://img.shields.io/bstats/players/29288?style=for-the-badge&link=https%3A%2F%2Fbstats.org%2Fplugin%2Fbukkit%2FClaims%2F29288"></a>
         <a href="https://discord.gg/MRB9kvSuhW" target="_blank" rel="noopener noreferrer"><img alt="Discord" src="https://img.shields.io/discord/1467775220260798559?style=for-the-badge"></a>
-        <a href="https://hangar.papermc.io/bradenk04/braden-claims" target="_blank" rel="noopener noreferrer"><img alt="Hangar" src="https://img.shields.io/hangar/dt/braden-claims?style=for-the-badge"></a>
+        <a href="https://modrinth.com/plugin/braden-claims" target="_blank" rel="noopener noreferrer"><img alt="Downloads" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fdownload-aggregate.bradenk04.workers.dev%2F%3Fgh%3Dbradenk04%2Fclaims%26mr%3Dbraden-claims%26hg%3Dbraden-claims&style=for-the-badge"></a>
 </div>
 </div>
 
