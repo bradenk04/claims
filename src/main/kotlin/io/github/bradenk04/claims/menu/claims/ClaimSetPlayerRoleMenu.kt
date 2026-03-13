@@ -13,7 +13,9 @@ import net.kyori.adventure.text.event.ClickCallback
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.geysermc.cumulus.form.Form
+import org.geysermc.cumulus.form.SimpleForm
 import org.geysermc.floodgate.api.player.FloodgatePlayer
+import java.util.UUID
 
 object ClaimSetPlayerRoleMenu {
     @Suppress("UnstableApiUsage")
@@ -51,7 +53,19 @@ object ClaimSetPlayerRoleMenu {
         }
     }
 
-    fun getForm(player: Player, floodgatePlayer: FloodgatePlayer, claim: Claim): Form {
-        TODO("Not yet implemented")
+    fun getForm(player: Player, floodgatePlayer: FloodgatePlayer, claim: Claim, editPlayer: UUID): Form {
+        val form = SimpleForm.builder()
+        form.title("Set Player Role")
+        claim.roles.forEach { role ->
+            form.button(role.name)
+        }
+        form.validResultHandler { form, response ->
+            val clicked = response.clickedButtonId()
+            val role = claim.roles[clicked]
+            claim.setPlayerRole(editPlayer, role.name)
+            ClaimMenu.openDialog(player, claim)
+        }
+
+        return form.build()
     }
 }

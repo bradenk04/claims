@@ -12,6 +12,7 @@ import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.geysermc.cumulus.form.Form
+import org.geysermc.cumulus.form.SimpleForm
 import org.geysermc.floodgate.api.player.FloodgatePlayer
 
 object ClaimPlayersMenu {
@@ -50,6 +51,21 @@ object ClaimPlayersMenu {
     }
 
     fun getForm(player: Player, floodgatePlayer: FloodgatePlayer, claim: Claim): Form {
-        TODO("Get form for bedrock players")
+        val form = SimpleForm.builder()
+        form.title("Claim Players")
+        claim.playerRoles.forEach { (uuid, role) ->
+            val player = Bukkit.getOfflinePlayer(uuid)
+            form.button(player.name ?: ((FloodgateHelper.getPlayer(player)?.username ?: "N/A") + ": " + role))
+        }
+
+        form.validResultHandler { form, response ->
+            val clicked = response.clickedButtonId()
+            val list = claim.playerRoles.toList()
+            val playerClicked = list[clicked].first
+
+            floodgatePlayer.sendForm(ClaimSetPlayerRoleMenu.getForm(player, floodgatePlayer, claim, playerClicked))
+        }
+
+        return form.build()
     }
 }

@@ -13,7 +13,9 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickCallback
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.geysermc.cumulus.form.CustomForm
 import org.geysermc.cumulus.form.Form
+import org.geysermc.floodgate.api.player.FloodgatePlayer
 
 object ClaimAddPlayerMenu {
     @Suppress("UnstableApiUsage")
@@ -62,7 +64,26 @@ object ClaimAddPlayerMenu {
         }
     }
 
-    fun getForm(executor: Player, claim: Claim): Form {
-        TODO("Not yet implemented")
+    fun getForm(executor: Player, floodgatePlayer: FloodgatePlayer, claim: Claim): Form {
+        val form = CustomForm.builder()
+
+        form.title("Add Player")
+        form.input("Player Username", "")
+        form.dropdown("Role", claim.roles.map { it.name })
+
+        form.validResultHandler { form, response ->
+            val username = response.next<String>() ?: return@validResultHandler
+            val roleName = response.next<String>() ?: return@validResultHandler
+            val role = claim.roles.firstOrNull { it.name == roleName } ?: return@validResultHandler
+
+            val profile = Bukkit.getOfflinePlayer(username)
+            val playerId = profile.playerProfile.id ?: (FloodgateHelper.getPlayer(profile)?.javaUniqueId ?: return@validResultHandler)
+
+            claim.setPlayerRole(playerId, role.name)
+
+            floodgatePlayer.sendForm(ClaimMenu.getForm(executor, floodgatePlayer, claim))
+        }
+
+        return form.build()
     }
 }

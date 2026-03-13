@@ -87,8 +87,7 @@ object ClaimMenu {
             .optionalDropdown("Edit other settings", listOf(
                 "None",
                 "Player Roles",
-                "Edit Role Permissions",
-                "Banned Players"
+                "Edit Role Permissions"
             ), true)
 
         menu.validResultHandler { form, response ->
@@ -98,15 +97,11 @@ object ClaimMenu {
 
             when (newSettings) {
                 1 -> {
-                    player.sendMessage("WIP")
+                    floodgatePlayer.sendForm(ClaimPlayersMenu.getForm(player, floodgatePlayer, claim))
                     return@validResultHandler
                 }
                 2 -> {
-                    player.sendMessage("WIP")
-                    return@validResultHandler
-                }
-                3 -> {
-                    player.sendMessage("WIP")
+                    floodgatePlayer.sendForm(ClaimRoleListMenu.getForm(player, floodgatePlayer, claim))
                     return@validResultHandler
                 }
             }

@@ -30,7 +30,7 @@ class ClaimPlugin : JavaPlugin() {
     override fun onEnable() {
         if (!dataFolder.exists()) dataFolder.mkdirs()
         plugin = this
-        metrics = Metrics(this, 14853)
+        metrics = Metrics(this, 29288)
         ConfigHandler.initialize()
         FloodgateHelper.setupFloodgate()
         Database.initialize()

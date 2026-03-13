@@ -11,6 +11,7 @@ import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
 import org.geysermc.cumulus.form.Form
+import org.geysermc.cumulus.form.SimpleForm
 import org.geysermc.floodgate.api.player.FloodgatePlayer
 
 object ClaimRoleListMenu {
@@ -43,6 +44,26 @@ object ClaimRoleListMenu {
     }
 
     fun getForm(player: Player, floodgatePlayer: FloodgatePlayer, claim: Claim): Form {
-        TODO("Not yet implemented")
+        val form = SimpleForm.builder()
+            .title("Claim Roles")
+
+        claim.roles.forEach { role ->
+            form.button(role.name)
+        }
+        form.button("Create new role")
+
+
+        form.validResultHandler { form, response ->
+            val clicked = response.clickedButtonId()
+
+            if (clicked == claim.roles.size) {
+                floodgatePlayer.sendForm(ClaimCreateRoleMenu.getForm(player, floodgatePlayer, claim))
+                return@validResultHandler
+            }
+
+            val clickedRole = claim.roles[clicked]
+            floodgatePlayer.sendForm(ClaimEditRoleMenu.getForm(player, floodgatePlayer, claim, clickedRole))
+        }
+        return form.build()
     }
 }
